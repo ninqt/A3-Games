@@ -45,7 +45,7 @@ public class GameLoop{
         board.SetPiece(selectedPiece.Value,selectedSpace);
         Console.Clear();
         renderEngine.DrawAllBoards();
-        ConsoleUI.Instance.DisplayMessage($"You have placed {selectedPiece.Value} on {selectedSpace}");
+        ConsoleUI.Instance.DisplayMessage($"You have placed {selectedPiece.Value} on {selectedSpace.X},{selectedSpace.Y}");
         Console.ReadKey();}
     public Piece GetPieceChoice(List<Piece> avaliablePieces){
         string messageString = "Avaliable Pieces:";
