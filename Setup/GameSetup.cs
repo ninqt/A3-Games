@@ -98,6 +98,9 @@ public class GameSetup(){ //Game setup script
                 players[1] = new AIPlayer();
                 rng.Shuffle(players);
                 break;}
+        for(int x = 0; x < players.Length; x++ ){
+            players[x].playerNumber = x + 1; //Assigning player numbers
+        }
         return players;}
 
 }
