@@ -22,7 +22,7 @@ public class GameLoop{
         }
     }
 
-    public bool PlayerTurn(Player currentPlayer){
+    private bool PlayerTurn(Player currentPlayer){
         if(currentPlayer.IsHuman){
             HumanTurn(currentPlayer);
             return true;
@@ -32,22 +32,26 @@ public class GameLoop{
             //AITurn();
         }
     }
-    public void HumanTurn(Player currentPlayer){ //TODO: Should return move
+    private void HumanTurn(Player currentPlayer){ //TODO: Should return move
         Console.Clear();
         renderEngine.DrawAllBoards();
         ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
+        Board selectedBoard = GetBoardChoice();
+
         List<Piece> avaliablePieces = rules.AvaliablePieces(currentPlayer);
-        Piece selectedPiece = null!;
-        if(avaliablePieces.TrueForAll(piece => piece.Value == avaliablePieces[0].Value) == false){
-            selectedPiece = GetPieceChoice(avaliablePieces);}
-        Board board = rules.BoardList[0]; //TODO: This should check if there are multiple boards
-        Point selectedSpace = GetSpaceChoice(board);
-        board.SetPiece(selectedPiece.Value,selectedSpace);
+        Piece selectedPiece = GetPieceChoice(avaliablePieces);
+
+        Point selectedSpace = GetSpaceChoice(selectedBoard);
+        selectedBoard.SetPiece(selectedPiece.Value,selectedSpace);
+
         Console.Clear();
         renderEngine.DrawAllBoards();
         ConsoleUI.Instance.DisplayMessage($"You have placed {selectedPiece.Value} on {selectedSpace.X},{selectedSpace.Y}");
         Console.ReadKey();}
-    public Piece GetPieceChoice(List<Piece> avaliablePieces){
+    private Piece GetPieceChoice(List<Piece> avaliablePieces){
+        if(avaliablePieces.TrueForAll(piece => piece.Value == avaliablePieces[0].Value) == true){
+            return avaliablePieces[0];
+        }
         string messageString = "Avaliable Pieces:";
         for(int x = 0; x < avaliablePieces.Count; x++){
             messageString = messageString + " " + avaliablePieces[x].Value;
@@ -63,7 +67,7 @@ public class GameLoop{
                 continue;}}
         return selectedPiece;}
 
-    public Point GetSpaceChoice(Board board){
+    private Point GetSpaceChoice(Board board){
         bool selectionIncomplete = true;
         Point selectedSpace = new Point(0,0);
         while(selectionIncomplete){
@@ -78,4 +82,22 @@ public class GameLoop{
                 ConsoleUI.Instance.DisplayMessage("Invalid space selected. Please try again.");
                 continue;}}
         return selectedSpace;}
+    
+    private Board GetBoardChoice(){
+        if(rules.BoardList.Count == 1){
+            return rules.BoardList[0]; //If there is only one board, no choice needs to be made.
+        }
+        bool selectionIncomplete = true;
+        Board selectedBoard = null!;
+        while(selectionIncomplete){
+            try{
+                int input = ConsoleUI.Instance.PromptInteger("Please enter a board to use.");
+                selectedBoard = rules.BoardList[input + 1];
+                break;}
+            catch{
+                ConsoleUI.Instance.DisplayMessage("You did not select a valid board. Please try again");
+                continue;}}
+        return selectedBoard;
+    }
+
 }
