@@ -1,0 +1,15 @@
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\OOPA1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\OOPA1.AssemblyInfoInputs.cache
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\OOPA1.AssemblyInfo.cs
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\OOPA1.csproj.CoreCompileInputs.cache
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\OOPA1.sourcelink.json
+C:\Users\nin\OOPA2\My Version\bin\Debug\net10.0\OOPA1.exe
+C:\Users\nin\OOPA2\My Version\bin\Debug\net10.0\OOPA1.deps.json
+C:\Users\nin\OOPA2\My Version\bin\Debug\net10.0\OOPA1.runtimeconfig.json
+C:\Users\nin\OOPA2\My Version\bin\Debug\net10.0\OOPA1.dll
+C:\Users\nin\OOPA2\My Version\bin\Debug\net10.0\OOPA1.pdb
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\OOPA1.dll
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\refint\OOPA1.dll
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\OOPA1.pdb
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\OOPA1.genruntimeconfig.cache
+C:\Users\nin\OOPA2\My Version\obj\Debug\net10.0\ref\OOPA1.dll
