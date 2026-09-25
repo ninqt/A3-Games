@@ -35,7 +35,7 @@ public class GameLoop{
     public void HumanTurn(Player currentPlayer){ //TODO: Should return move
         Console.Clear();
         renderEngine.DrawAllBoards();
-        ConsoleUI.Instance.DisplayMessage("It is player {currentPlayer.playerNumber}'s turn.");
+        ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
         List<Piece> avaliablePieces = rules.AvaliablePieces(currentPlayer);
         Piece selectedPiece = null!;
         if(avaliablePieces.TrueForAll(piece => piece.Value == avaliablePieces[0].Value) == false){
@@ -48,9 +48,9 @@ public class GameLoop{
         ConsoleUI.Instance.DisplayMessage($"You have placed {selectedPiece.Value} on {selectedSpace}");
         Console.ReadKey();}
     public Piece GetPieceChoice(List<Piece> avaliablePieces){
-        string messageString = "Avaliable Pieces: ";
+        string messageString = "Avaliable Pieces:";
         for(int x = 0; x < avaliablePieces.Count; x++){
-            messageString = messageString + avaliablePieces[x].Value;
+            messageString = messageString + " " + avaliablePieces[x].Value;
         }
         ConsoleUI.Instance.DisplayMessage(messageString);
         Piece selectedPiece = null!;

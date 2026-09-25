@@ -57,7 +57,7 @@ public class NumericalTicTacToe : Rules, IRules {
         for(int x = 1; x < maxSpace; x++){
             int newPieceValue = x;
             string newPieceRender = newPieceValue.ToString($"D{renderHelper.Length}");
-            newPieceSet.Add(new Piece(x,$"D{x}"));}
+            newPieceSet.Add(new Piece(newPieceValue,newPieceRender));}
         return newPieceSet;
     }
     
