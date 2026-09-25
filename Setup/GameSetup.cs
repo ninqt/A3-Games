@@ -16,7 +16,8 @@ public class GameSetup(){ //Game setup script
         ConsoleUI.Instance.DisplayMessage("Welcome to the IFQ584 A3 Game Program.");
         Rules selectedRules = RulesFactory();
         Player[] players = PlayersFactory();
-        GameLoop gameLoop = new GameLoop(selectedRules,players); }
+        GameLoop gameLoop = new GameLoop(selectedRules,players);
+        gameLoop.RunGame(); }
 
 
     public Rules RulesFactory(){ //Obtains inputs from player to select and create rules
@@ -62,7 +63,8 @@ public class GameSetup(){ //Game setup script
             boardSize = ConsoleUI.Instance.PromptInteger(promptString);
             if(boardSize == 0){
                 ConsoleUI.Instance.DisplayMessage("Board size must be at least 1.");
-                continue;}}
+                continue;}
+            break;}
         return boardSize;}
 
     public int ModeSelection(){
@@ -71,7 +73,7 @@ public class GameSetup(){ //Game setup script
         int mode = 0;
         while(incomplete){
             mode = ConsoleUI.Instance.PromptInteger(promptString);
-            if(mode != 1 || mode != 2){
+            if(mode != 1 && mode != 2){
                 ConsoleUI.Instance.DisplayMessage("Mode must be a listed mode. Please try again.");
                 continue;}
             else{

@@ -25,12 +25,14 @@ public class GameLoop{
     public bool PlayerTurn(Player currentPlayer){
         if(currentPlayer.IsHuman){
             HumanTurn(currentPlayer);
+            return true;
         }
         else{
-            AITurn();
+            return true;
+            //AITurn();
         }
     }
-    public Move HumanTurn(Player currentPlayer){
+    public void HumanTurn(Player currentPlayer){ //TODO: Should return move
         Console.Clear();
         renderEngine.DrawAllBoards();
         ConsoleUI.Instance.DisplayMessage("It is player {currentPlayer.playerNumber}'s turn.");
@@ -38,10 +40,13 @@ public class GameLoop{
         Piece selectedPiece = null!;
         if(avaliablePieces.TrueForAll(piece => piece.Value == avaliablePieces[0].Value) == false){
             selectedPiece = GetPieceChoice(avaliablePieces);}
-        Board board = rules.BoardList[0];
+        Board board = rules.BoardList[0]; //TODO: This should check if there are multiple boards
         Point selectedSpace = GetSpaceChoice(board);
-
-    }
+        board.SetPiece(selectedPiece.Value,selectedSpace);
+        Console.Clear();
+        renderEngine.DrawAllBoards();
+        ConsoleUI.Instance.DisplayMessage($"You have placed {selectedPiece.Value} on {selectedSpace}");
+        Console.ReadKey();}
     public Piece GetPieceChoice(List<Piece> avaliablePieces){
         string messageString = "Avaliable Pieces: ";
         for(int x = 0; x < avaliablePieces.Count; x++){
@@ -72,7 +77,5 @@ public class GameLoop{
             catch{
                 ConsoleUI.Instance.DisplayMessage("Invalid space selected. Please try again.");
                 continue;}}
-        return selectedSpace;
-
-    }
+        return selectedSpace;}
 }

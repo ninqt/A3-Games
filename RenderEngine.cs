@@ -20,9 +20,11 @@ public class RenderEngine { //Draws the board to the screen so that the user can
                 Point space = new Point(x,y);
                 string spaceRender = "";
                 Piece piece = board.GetPiece(space);
-                spaceRender = piece.RenderValue; //($"D{blankSpace.Length}");
                 if(piece == null){
                     spaceRender = blankSpace;} //If there is no piece, we catch and insert a default space
+                else{
+                    spaceRender = piece.RenderValue; //($"D{blankSpace.Length}");
+                }
                 line = line + ($"  {spaceRender}  ");}
             Console.WriteLine(line);}}
 }
