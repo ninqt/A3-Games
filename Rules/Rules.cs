@@ -54,7 +54,7 @@ public class NumericalTicTacToe : Rules, IRules {
         List<Piece> newPieceSet = new List<Piece>();
         int maxSpace = boardSize * boardSize; // Maxspace is calculated
         string renderHelper = System.Convert.ToString(maxSpace);
-        for(int x = 1; x < maxSpace; x++){
+        for(int x = 1; x <= maxSpace; x++){ //Change < into <= to include maxSpace in the piece set -- Terry
             int newPieceValue = x;
             string newPieceRender = newPieceValue.ToString($"D{renderHelper.Length}");
             newPieceSet.Add(new Piece(newPieceValue,newPieceRender));}
