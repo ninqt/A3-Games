@@ -18,6 +18,14 @@ public class GameLoop{
             for(int x = 0 ; x < players.Length; x++){
                 Player currentPlayer = players[x];
                 bool gameWon = PlayerTurn(currentPlayer);
+                if(gameWon == true){
+                    Console.Clear();
+                    renderEngine.DrawAllBoards();
+                    ConsoleUI.Instance.DisplayMessage($"Player {currentPlayer.playerNumber} has won the game.");
+                    ConsoleUI.Instance.DisplayMessage("The program will now exit.");
+                    gameIncomplete = false;
+                    //TODO: Need more of a hard exit. ALSO. Any save file here should be erased(?)
+                }
             }
         }
     }
@@ -39,5 +47,6 @@ public class GameLoop{
         selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
 
+\\
 
 }
