@@ -62,7 +62,7 @@ public class NumericalTicTacToe : Rules, IRules {
     }
     
     public override bool CheckWin(Move move){
-        Point space = move.MovePosition;
+        Point space = move.Position;
         Board board = boardList[0];
         Piece[] row = board.GetRow(space);//Checking Row
         bool rowWon = WinSum(row);
@@ -85,7 +85,7 @@ public class NumericalTicTacToe : Rules, IRules {
         return false;} //If method makes it this far, the game has not been won.
 
     public bool WinSum(Piece[] pieceArray){ //Summing up for a win
-        if(Array.TrueForAll(pieceArray, x => x.Value != 0) == false){
+        if(!Array.TrueForAll(pieceArray, x => x != null)){
             return false;} // We do not sum incomplete lines
         int total = 0;
         foreach(Piece piece in pieceArray){

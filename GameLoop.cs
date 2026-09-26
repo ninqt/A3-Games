@@ -23,81 +23,21 @@ public class GameLoop{
     }
 
     private bool PlayerTurn(Player currentPlayer){
-        if(currentPlayer.IsHuman){
-            HumanTurn(currentPlayer);
-            return true;
-        }
-        else{
-            return true;
-            //AITurn();
-        }
-    }
-    private void HumanTurn(Player currentPlayer){ //TODO: Should return move
         Console.Clear();
         renderEngine.DrawAllBoards();
         ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
-        Board selectedBoard = GetBoardChoice();
-
-        List<Piece> avaliablePieces = rules.AvaliablePieces(currentPlayer);
-        Piece selectedPiece = GetPieceChoice(avaliablePieces);
-
-        Point selectedSpace = GetSpaceChoice(selectedBoard);
-        selectedBoard.SetPiece(selectedPiece.Value,selectedSpace);
-
-        Console.Clear();
-        renderEngine.DrawAllBoards();
-        ConsoleUI.Instance.DisplayMessage($"You have placed {selectedPiece.Value} on {selectedSpace.X},{selectedSpace.Y}");
-        Console.ReadKey();}
-    private Piece GetPieceChoice(List<Piece> avaliablePieces){
-        if(avaliablePieces.TrueForAll(piece => piece.Value == avaliablePieces[0].Value) == true){
-            return avaliablePieces[0];
+        //Insert Command entering window here?
+        Move playerMove = currentPlayer.PlayerTurn(rules);
+        PerformTurn(playerMove);
+        bool checkForWin = rules.CheckWin(playerMove);
+        //TODO: If win is false, move should be logged in history here.
+        return checkForWin;
         }
-        string messageString = "Avaliable Pieces:";
-        for(int x = 0; x < avaliablePieces.Count; x++){
-            messageString = messageString + " " + avaliablePieces[x].Value;
-        }
-        ConsoleUI.Instance.DisplayMessage(messageString);
-        Piece selectedPiece = null!;
-        while(selectedPiece == null){
-            try{
-                int playerInput = ConsoleUI.Instance.PromptInteger("Please select a piece to use.");
-                selectedPiece = avaliablePieces.Find(piece => piece.Value == playerInput)!;}
-            catch{
-                ConsoleUI.Instance.DisplayMessage("You did not select a valid piece. Try again.");
-                continue;}}
-        return selectedPiece;}
 
-    private Point GetSpaceChoice(Board board){
-        bool selectionIncomplete = true;
-        Point selectedSpace = new Point(0,0);
-        while(selectionIncomplete){
-            try{
-                int row = ConsoleUI.Instance.PromptInteger("Enter the row to use. e.g. 2 for row 2 (From the top).");
-                selectedSpace.X = row;
-                int column = ConsoleUI.Instance.PromptInteger("Enter the column to use. e.g. 1 for column 1 (From the left).");
-                selectedSpace.Y = column;
-                board.CheckSpace(selectedSpace);
-                break;}
-            catch{
-                ConsoleUI.Instance.DisplayMessage("Invalid space selected. Please try again.");
-                continue;}}
-        return selectedSpace;}
-    
-    private Board GetBoardChoice(){
-        if(rules.BoardList.Count == 1){
-            return rules.BoardList[0]; //If there is only one board, no choice needs to be made.
-        }
-        bool selectionIncomplete = true;
-        Board selectedBoard = null!;
-        while(selectionIncomplete){
-            try{
-                int input = ConsoleUI.Instance.PromptInteger("Please enter a board to use.");
-                selectedBoard = rules.BoardList[input + 1];
-                break;}
-            catch{
-                ConsoleUI.Instance.DisplayMessage("You did not select a valid board. Please try again");
-                continue;}}
-        return selectedBoard;
+    private void PerformTurn(Move move){
+        Board selectedBoard = rules.BoardList[move.BoardNumber];
+        selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
+
 
 }
