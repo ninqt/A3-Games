@@ -75,10 +75,40 @@ public class AIPlayer : Player {
     public override bool IsHuman => false;
 
     public override Move PlayerTurn(Rules rules){ //TODO: ALL OF THIS IS TEMP TO KEEP COMPILER HAPPY
-        Piece selectedPiece = new Piece(0,"0");
-        Point selectedSpace = new Point(0,0);
-        Move confirmedMove = new Move(selectedPiece,0,0,selectedSpace);
-        return confirmedMove;
+        for(int x = 0; x < rules.BoardList.Count ; x++)
+        {
+            Board board = rules.BoardList[x];
+            List<Point> avaliableSpaces = board.GetAvaliableSpaces(); //Get all free spaces
+            List<Piece> avaliablePieces = rules.AvaliablePieces(this);
+            Move winningMove = FindWin(avaliablePieces,avaliableSpaces,board,rules,x); //Looking for a win first
+            if(winningMove != null){
+                return winningMove;}}
+        Move randomMove = RandomMove(rules); //Random move if no win found
+        return randomMove;
+        }
+    private Move FindWin(List<Piece> avaliablePieces,List<Point> avaliableSpaces,Board board,Rules rules, int boardNumber){
+        foreach(Point space in avaliableSpaces){
+            foreach(Piece piece in avaliablePieces){
+                board.SetPiece(piece.Value,space); //Placing piece on board
+                Move move = new Move(piece,this.playerNumber,boardNumber,space);
+                bool possibleWin = rules.CheckWin(move); //Checking if there are any wins using that piece
+                board.RemovePiece(space);
+                if(possibleWin){
+                    return move;}}} //If no wins, we remove the piece
+        return null!;} //If all spaces fail to find win, we can return and place a random piece
+
+    private Move RandomMove(Rules rules){
+        Random rng = new Random();
+        int randomBoardNumber = rng.Next(0,rules.BoardList.Count);
+        Board randomBoard = rules.BoardList[randomBoardNumber];
+        List<Piece> pieces = rules.AvaliablePieces(this);
+        Piece randomPiece = pieces[rng.Next(0,pieces.Count)];
+        List<Point> spaces = randomBoard.GetAvaliableSpaces();
+        Point randomSpace = spaces[rng.Next(0,spaces.Count)];
+        Move randomMove = new Move(randomPiece,this.playerNumber,randomBoardNumber,randomSpace);
+        return randomMove;
+    }
     }
 
-}
+
+

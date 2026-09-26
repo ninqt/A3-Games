@@ -38,7 +38,7 @@ public class GameLoop{
         Move playerMove = currentPlayer.PlayerTurn(rules);
         PerformTurn(playerMove);
         bool checkForWin = rules.CheckWin(playerMove);
-        //TODO: If win is false, move should be logged in history here.
+        //TODO: If win is false, move should be logged in history here. Also this should be a result
         return checkForWin;
         }
 
@@ -47,6 +47,6 @@ public class GameLoop{
         selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
 
-\\
+
 
 }
