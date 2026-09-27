@@ -23,8 +23,9 @@ public class HistoryEngine {
 
     //TODO: Needs reference to boardList
     public bool Undo(){ //Performs an Undo on given list of boards.
+        if(moveHistory.Count == 0){
+            throw new NoUndoAvailable();}
         Move lastMove = moveHistory[^1];
-        //TODO: Throw exception here if no move found
         Board board = boardList[lastMove.BoardNumber];//? Depends How boardlist is implemented
         board.RemovePiece(lastMove.Position);
         //TODO: Check if piece was successfully removed??
@@ -35,13 +36,14 @@ public class HistoryEngine {
     }
 
     public bool Redo(){
+        if(redoHistory.Count == 0){
+            throw new NoRedoAvailable();}
         Move redoMove = redoHistory[^1];
         Board board = boardList[redoMove.BoardNumber];
         board.SetPiece(redoMove.Piece.Value,redoMove.Position);
         redoHistory.Remove(redoMove);
         moveHistory.Add(redoMove);
-        return true;
-    }
+        return true;}
 
     //From here, a load from save method could be created that imports all saved moves
     //Into redoHistory and then loops through a .Count, redoing all the taken moves.
