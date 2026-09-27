@@ -22,7 +22,7 @@ public class HumanPlayer : Player {
         return confirmedMove;}
     private Piece GetPieceChoice(List<Piece> avaliablePieces){
         if(avaliablePieces.TrueForAll(piece => piece.Value == avaliablePieces[0].Value) == true){
-            return avaliablePieces[0];}
+            return avaliablePieces[0];} //TODO: Need to workaround there only being one piece in pool in NTTT
         string messageString = "Avaliable Pieces:";
         for(int x = 0; x < avaliablePieces.Count; x++){
             messageString = messageString + " " + avaliablePieces[x].Value;}
@@ -91,9 +91,9 @@ public class AIPlayer : Player {
             foreach(Piece piece in avaliablePieces){
                 board.SetPiece(piece.Value,space); //Placing piece on board
                 Move move = new Move(piece,this.playerNumber,boardNumber,space);
-                bool possibleWin = rules.CheckWin(move); //Checking if there are any wins using that piece
+                Report possibleWin = rules.CheckWin(move); //Checking if there are any wins using that piece
                 board.RemovePiece(space);
-                if(possibleWin){
+                if(possibleWin.Result == Result.win){
                     return move;}}} //If no wins, we remove the piece
         return null!;} //If all spaces fail to find win, we can return and place a random piece
 

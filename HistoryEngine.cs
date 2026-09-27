@@ -1,23 +1,23 @@
 using System;
 using System.Drawing;
 public class HistoryEngine {
-    private List<Move> moveHistory;
-    private List<Move> redoHistory;
+    private List<Move> moveHistory = new List<Move>();
+    private List<Move> redoHistory = new List<Move>();
+
+    private List<Board> boardList;
 
     private static HistoryEngine? instance; //Singleton pointer.
 
     public  static HistoryEngine Instance {get{return instance;}}
 
-    public void RecordMove(Piece piece,Player player, int boardNumber,Point position){
-        Move newMove = MoveFactory(piece,player,boardNumber,position);
-        moveHistory.Add(newMove);
-        redoHistory.Clear(); //Anything in redo is outdated now so is flushed
+    public HistoryEngine(List<Board> boardList){
+        instance = this;
+        this.boardList = boardList;
     }
 
-
-    private Move MoveFactory(Piece piece, Player player, int boardNumber,Point position){
-        Move newMove = new Move(piece,player,boardNumber,position);
-        return newMove;
+    public void RecordMove(Move move){
+        moveHistory.Add(move);
+        redoHistory.Clear(); //Anything in redo is outdated now so is flushed
     }
 
 
@@ -25,21 +25,19 @@ public class HistoryEngine {
     public bool Undo(){ //Performs an Undo on given list of boards.
         Move lastMove = moveHistory[^1];
         //TODO: Throw exception here if no move found
-        Board board = boardList[lastMove.BoardNumber - 1];//? Depends How boardlist is implemented
-        board.RemovePiece(lastMove.MyPiece);
+        Board board = boardList[lastMove.BoardNumber];//? Depends How boardlist is implemented
+        board.RemovePiece(lastMove.Position);
         //TODO: Check if piece was successfully removed??
         moveHistory.Remove(lastMove);
         redoHistory.Add(lastMove);
-        //^^ There is also a world where we index thru but I think this is more consistent.
-        //TODO: Return undo successful or something
         return true;
 
     }
 
     public bool Redo(){
         Move redoMove = redoHistory[^1];
-        Board board = boardList[lastMove.BoardNumber - 1];
-        board.SetPiece(redoMove.piece);
+        Board board = boardList[redoMove.BoardNumber];
+        board.SetPiece(redoMove.Piece.Value,redoMove.Position);
         redoHistory.Remove(redoMove);
         moveHistory.Add(redoMove);
         return true;

@@ -1,0 +1,17 @@
+"filename", "language", "C#", "XML", "comment", "blank", "total"
+"c:\Users\nin\OOPA2\My Version\Board.cs", "C#", 75, 0, 0, 1, 76
+"c:\Users\nin\OOPA2\My Version\Exceptions.cs", "C#", 8, 0, 0, 1, 9
+"c:\Users\nin\OOPA2\My Version\GameLoop.cs", "C#", 61, 0, 2, 7, 70
+"c:\Users\nin\OOPA2\My Version\HistoryEngine.cs", "C#", 33, 0, 5, 10, 48
+"c:\Users\nin\OOPA2\My Version\Move.cs", "C#", 18, 0, 0, 2, 20
+"c:\Users\nin\OOPA2\My Version\OOPA1.csproj", "XML", 0, 8, 0, 3, 11
+"c:\Users\nin\OOPA2\My Version\Piece.cs", "C#", 10, 0, 0, 2, 12
+"c:\Users\nin\OOPA2\My Version\Player.cs", "C#", 100, 0, 0, 15, 115
+"c:\Users\nin\OOPA2\My Version\Program.cs", "C#", 4, 0, 0, 1, 5
+"c:\Users\nin\OOPA2\My Version\RenderEngine.cs", "C#", 29, 0, 0, 1, 30
+"c:\Users\nin\OOPA2\My Version\Result.cs", "C#", 15, 0, 0, 4, 19
+"c:\Users\nin\OOPA2\My Version\Rules\Rules.cs", "C#", 87, 0, 1, 26, 114
+"c:\Users\nin\OOPA2\My Version\Setup\GameSetup.cs", "C#", 90, 0, 0, 22, 112
+"c:\Users\nin\OOPA2\My Version\UI\ConsoleUI.cs", "C#", 50, 0, 0, 13, 63
+"c:\Users\nin\OOPA2\My Version\UI\UICommands.cs", "C#", 26, 0, 3, 6, 35
+"Total", "-", 606, 8, 11, 114, 739
