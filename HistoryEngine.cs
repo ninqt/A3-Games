@@ -4,15 +4,15 @@ public class HistoryEngine {
     private List<Move> moveHistory = new List<Move>();
     private List<Move> redoHistory = new List<Move>();
 
-    private List<Board> boardList;
+    private Rules rules;
 
     private static HistoryEngine? instance; //Singleton pointer.
 
     public  static HistoryEngine Instance {get{return instance;}}
 
-    public HistoryEngine(List<Board> boardList){
+    public HistoryEngine(Rules rules){
         instance = this;
-        this.boardList = boardList;
+        this.rules = rules;
     }
 
     public void RecordMove(Move move){
@@ -26,7 +26,7 @@ public class HistoryEngine {
         if(moveHistory.Count == 0){
             throw new NoUndoAvailable();}
         Move lastMove = moveHistory[^1];
-        Board board = boardList[lastMove.BoardNumber];//? Depends How boardlist is implemented
+        Board board = rules.BoardList[lastMove.BoardNumber];//? Depends How boardlist is implemented
         board.RemovePiece(lastMove.Position);
         //TODO: Check if piece was successfully removed??
         moveHistory.Remove(lastMove);
@@ -39,8 +39,9 @@ public class HistoryEngine {
         if(redoHistory.Count == 0){
             throw new NoRedoAvailable();}
         Move redoMove = redoHistory[^1];
-        Board board = boardList[redoMove.BoardNumber];
+        Board board = rules.BoardList[redoMove.BoardNumber];
         board.SetPiece(redoMove.Piece.Value,redoMove.Position);
+        rules.CheckWin(redoMove); //Mainly for Notakto, to re-kill a board.
         redoHistory.Remove(redoMove);
         moveHistory.Add(redoMove);
         return true;}

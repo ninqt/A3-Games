@@ -11,6 +11,7 @@ public class RenderEngine { //Draws the board to the screen so that the user can
     public void DrawAllBoards(){
         Console.Clear(); //TODO: This should be somewhere else
         for(int x = 0; x < boardList.Count ; x++ ){
+            if(boardList.Count > 1) Console.WriteLine($"---Board {x+1}---");
             DrawBoard(boardList[x]);}
     }
     public void DrawBoard(Board board) {

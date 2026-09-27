@@ -65,6 +65,10 @@ public class HumanPlayer : Player {
                 boardNumber = ConsoleUI.Instance.PromptInteger("Please enter a board to use.");
                 boardNumber = boardNumber - 1; //Converting to machine number
                 selectedBoard = rules.BoardList[boardNumber];
+                if(selectedBoard.IsLive == false){
+                    ConsoleUI.Instance.DisplayMessage("Selected board is not live. Please try again");
+                    continue;
+                }
                 break;}
             catch{
                 ConsoleUI.Instance.DisplayMessage("You did not select a valid board. Please try again");
@@ -79,6 +83,7 @@ public class AIPlayer : Player {
         for(int x = 0; x < rules.BoardList.Count ; x++)
         {
             Board board = rules.BoardList[x];
+            if(!board.IsLive) continue;
             List<Point> avaliableSpaces = board.GetAvaliableSpaces(); //Get all free spaces
             List<Piece> availablePieces = rules.AvailablePieces(this);
             Move winningMove = FindWin(availablePieces,avaliableSpaces,board,rules,x); //Looking for a win first
@@ -100,8 +105,18 @@ public class AIPlayer : Player {
 
     private Move RandomMove(Rules rules){
         Random rng = new Random();
-        int randomBoardNumber = rng.Next(0,rules.BoardList.Count);
-        Board randomBoard = rules.BoardList[randomBoardNumber];
+        bool boardSelected = false;
+        List<Board> newBoardList = new List<Board>(rules.BoardList);
+        Board randomBoard = null!;
+        int randomBoardNumber = 0;
+        while(!boardSelected){
+            randomBoardNumber = rng.Next(0,newBoardList.Count);
+            randomBoard = newBoardList[randomBoardNumber];
+            if(!randomBoard.IsLive){
+                newBoardList.Remove(randomBoard);
+                continue;}
+            break;}
+        randomBoardNumber = rules.BoardList.IndexOf(randomBoard); //Fixing up index to be correct with game
         List<Piece> pieces = rules.AvailablePieces(this);
         Piece randomPiece = pieces[rng.Next(0,pieces.Count)];
         List<Point> spaces = randomBoard.GetAvaliableSpaces();

@@ -7,7 +7,8 @@ public class GameSetup(){ //Game setup script
 
     private Dictionary<int,Rules> Games = new(){
         [1] = new NumericalTicTacToe(), //New Games can be added to this strategy
-        [2] = new GomokuRules()
+        [2] = new GomokuRules(),
+        [3] = new NotaktoRules()
 
     };
 
