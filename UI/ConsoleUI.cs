@@ -51,7 +51,12 @@ public class ConsoleUI {
     public void DisplayMessage(string message){ //To keep things logically consistent, ConsoleUI is
         Console.WriteLine(message);             //always in charge of displaying messages to the player.
     }
+    
+    public void PromptAnyKey(){
+        Console.WriteLine("Press any key to continue.");
+        Console.ReadKey();
     }
+}
 
 
 
