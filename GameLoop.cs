@@ -4,12 +4,14 @@ public class GameLoop{
     private List<Board> boardList = null!; // List of gameboards
     private Player[] players = new Player[2]; //Array of players
     private RenderEngine renderEngine = null!;
+    private HistoryEngine historyEngine = null!;
     private Rules rules = null!;
 
     public GameLoop(Rules selectedRules,Player[] players){
         this.rules = selectedRules;
         this.players = players;
         renderEngine = new RenderEngine(rules.BoardList);
+        historyEngine = new HistoryEngine(rules.BoardList);
     }
 
     public void RunGame(){
@@ -35,7 +37,9 @@ public class GameLoop{
         Move playerMove = currentPlayer.PlayerTurn(rules);
         PerformTurn(playerMove);
         Report checkForResult = rules.CheckWin(playerMove);
-        //TODO: If win is false, move should be logged in history here. Also this should be a result
+        historyEngine.RecordMove(playerMove); //History engine logs move taken.
+        Console.Clear();
+        renderEngine.DrawAllBoards();
         ConsoleUI.Instance.DisplayMessage($"Player {playerMove.PlayerNumber} placed {playerMove.Piece.Value} on {playerMove.Position}");
         ConsoleUI.Instance.PromptAnyKey();
         return checkForResult;

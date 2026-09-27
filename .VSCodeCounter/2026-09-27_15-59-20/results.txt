@@ -1,0 +1,44 @@
+Date : 2026-09-27 15:59:20
+Directory : c:\Users\nin\OOPA2\My Version
+Total : 15 files,  614 codes, 11 comments, 114 blanks, all 739 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         14 |        606 |         11 |        111 |        728 |
+| XML      |          1 |          8 |          0 |          3 |         11 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                             | files      | code       | comment    | blank      | total      |
++--------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                |         15 |        614 |         11 |        114 |        739 |
+| . (Files)                                        |         11 |        361 |          7 |         47 |        415 |
+| Rules                                            |          1 |         87 |          1 |         26 |        114 |
+| Setup                                            |          1 |         90 |          0 |         22 |        112 |
+| UI                                               |          2 |         76 |          3 |         19 |         98 |
++--------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                         | language | code       | comment    | blank      | total      |
++--------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\nin\OOPA2\My Version\Board.cs           | C#       |         75 |          0 |          1 |         76 |
+| c:\Users\nin\OOPA2\My Version\Exceptions.cs      | C#       |          8 |          0 |          1 |          9 |
+| c:\Users\nin\OOPA2\My Version\GameLoop.cs        | C#       |         61 |          2 |          7 |         70 |
+| c:\Users\nin\OOPA2\My Version\HistoryEngine.cs   | C#       |         33 |          5 |         10 |         48 |
+| c:\Users\nin\OOPA2\My Version\Move.cs            | C#       |         18 |          0 |          2 |         20 |
+| c:\Users\nin\OOPA2\My Version\OOPA1.csproj       | XML      |          8 |          0 |          3 |         11 |
+| c:\Users\nin\OOPA2\My Version\Piece.cs           | C#       |         10 |          0 |          2 |         12 |
+| c:\Users\nin\OOPA2\My Version\Player.cs          | C#       |        100 |          0 |         15 |        115 |
+| c:\Users\nin\OOPA2\My Version\Program.cs         | C#       |          4 |          0 |          1 |          5 |
+| c:\Users\nin\OOPA2\My Version\RenderEngine.cs    | C#       |         29 |          0 |          1 |         30 |
+| c:\Users\nin\OOPA2\My Version\Result.cs          | C#       |         15 |          0 |          4 |         19 |
+| c:\Users\nin\OOPA2\My Version\Rules\Rules.cs     | C#       |         87 |          1 |         26 |        114 |
+| c:\Users\nin\OOPA2\My Version\Setup\GameSetup.cs | C#       |         90 |          0 |         22 |        112 |
+| c:\Users\nin\OOPA2\My Version\UI\ConsoleUI.cs    | C#       |         50 |          0 |         13 |         63 |
+| c:\Users\nin\OOPA2\My Version\UI\UICommands.cs   | C#       |         26 |          3 |          6 |         35 |
+| Total                                            |          |        614 |         11 |        114 |        739 |
++--------------------------------------------------+----------+------------+------------+------------+------------+

@@ -22,7 +22,7 @@ public class HumanPlayer : Player {
         return confirmedMove;}
     private Piece GetPieceChoice(List<Piece> avaliablePieces){
         if(avaliablePieces.TrueForAll(piece => piece.Value == avaliablePieces[0].Value) == true){
-            return avaliablePieces[0];}
+            return avaliablePieces[0];} //TODO: Need to workaround there only being one piece in pool in NTTT
         string messageString = "Avaliable Pieces:";
         for(int x = 0; x < avaliablePieces.Count; x++){
             messageString = messageString + " " + avaliablePieces[x].Value;}
