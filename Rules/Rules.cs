@@ -6,7 +6,7 @@ public interface IRules{
 
 
     void SetupRules(int boardSize = 0);
-    bool CheckWin(Move move);
+    Report CheckWin(Move move);
     List<Piece> AvaliablePieces(Player player);
 
 }
@@ -24,7 +24,7 @@ public abstract class Rules : IRules{
     protected abstract Board BoardFactory(int boardSize);
     protected abstract List<Piece> CreatePieceSet(int boardSize);
 
-    public abstract bool CheckWin(Move move);
+    public abstract Report CheckWin(Move move);
     public abstract void SetupRules(int boardSize = 0);
     public abstract List<Piece> AvaliablePieces(Player player);
 }
@@ -61,28 +61,31 @@ public class NumericalTicTacToe : Rules, IRules {
         return newPieceSet;
     }
     
-    public override bool CheckWin(Move move){
+    public override Report CheckWin(Move move){
         Point space = move.Position;
         Board board = boardList[0];
         Piece[] row = board.GetRow(space);//Checking Row
         bool rowWon = WinSum(row);
         if(rowWon){
-            return true;}
+            return new Report(Result.win,$"Player {move.PlayerNumber} has won the game.");}
         Piece[] column = board.GetColumn(space);//Checking Column
         bool columnWon = WinSum(column);
         if(columnWon){
-            return true;}
+            return new Report(Result.win,$"Player {move.PlayerNumber} has won the game.");}
         if(space.X == space.Y){ //If these are equal, the space is on a diagonal line for Num.TTT Purposes.
             Piece[] NWDiagonal = board.GetNWDiagonal();
             bool NWWin = WinSum(NWDiagonal);
             if(NWWin){
-                return true;}}
+                return new Report(Result.win,$"Player {move.PlayerNumber} has won the game.");}}
         if((space.X + space.Y) == (board.BoardSize + 1)){ // If these are equal, space is on the diagonal line starting at NW
             Piece[] NEDiagonal = board.GetNEDiagonal();
             bool NEWin = WinSum(NEDiagonal);
             if(NEWin == true){
-                return true;}}
-        return false;} //If method makes it this far, the game has not been won.
+                return new Report(Result.win,$"Player {move.PlayerNumber} has won the game.");}}
+        if(board.Pieces.Count == 0){
+            return new Report(Result.draw,$"Game ends in a draw due to no more pieces being avaliable.");}
+        return new Report();} //If method makes it this far, the game has not been won.
+        //TODO: Extend NTTT checkwin to add check for drawing via there being no pieces left and no win.
 
     public bool WinSum(Piece[] pieceArray){ //Summing up for a win
         if(!Array.TrueForAll(pieceArray, x => x != null)){

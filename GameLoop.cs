@@ -17,8 +17,8 @@ public class GameLoop{
         while(!gameComplete){
             for(int x = 0 ; x < players.Length; x++){
                 Player currentPlayer = players[x];
-                Result turnResult = PlayerTurn(currentPlayer);
-                gameComplete = CheckGameEnd(currentPlayer,turnResult);
+                Report turnReport = PlayerTurn(currentPlayer);
+                gameComplete = CheckGameEnd(currentPlayer,turnReport);
                 if(gameComplete == true){
                     ConsoleUI.Instance.DisplayMessage("The program will now exit.");
                     //TODO: Need more of a hard exit. ALSO. Any save file here should be erased(?)
@@ -27,14 +27,14 @@ public class GameLoop{
         }
     }
 
-    private Result PlayerTurn(Player currentPlayer){
+    private Report PlayerTurn(Player currentPlayer){
         Console.Clear();
         renderEngine.DrawAllBoards();
         ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
         //Insert Command entering window here?
         Move playerMove = currentPlayer.PlayerTurn(rules);
         PerformTurn(playerMove);
-        Result checkForResult = rules.CheckWin(playerMove);
+        Report checkForResult = rules.CheckWin(playerMove);
         //TODO: If win is false, move should be logged in history here. Also this should be a result
         ConsoleUI.Instance.DisplayMessage($"Player {playerMove.PlayerNumber} placed {playerMove.Piece.Value} on {playerMove.Position}");
         ConsoleUI.Instance.PromptAnyKey();
@@ -46,18 +46,18 @@ public class GameLoop{
         selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
 
-    public bool CheckGameEnd(Player currentPlayer, Result turnResult){
-        switch(turnResult){
+    public bool CheckGameEnd(Player currentPlayer, Report turnReport){
+        switch(turnReport.Result){
             case Result.nothing:
             return false;
             case Result.draw:
-            ConsoleUI.Instance.DisplayMessage("Game has ended in a draw.");
+            ConsoleUI.Instance.DisplayMessage(turnReport.Message);
             return true;
             case Result.loss:
-            ConsoleUI.Instance.DisplayMessage($"Player {currentPlayer.playerNumber} has lost the game.");
+            ConsoleUI.Instance.DisplayMessage(turnReport.Message);
             return true;
             case Result.win:
-            ConsoleUI.Instance.DisplayMessage($"Player {currentPlayer.playerNumber} has won the game!");
+            ConsoleUI.Instance.DisplayMessage(turnReport.Message);
             return true;
         }
         return false; //Just incase
