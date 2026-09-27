@@ -24,30 +24,15 @@ public class ConsoleUI {
             incomplete = false;}
         return chosenNumber;}
 
-        private Dictionary<string, UICommand> CommandStrategies = new(){
-        ["HELP"] = new HelpCommand(), //Strategy pattern to allow user to select various commands
-        ["SAVE"] = new SaveCommand(),
-        ["LOAD"] = new LoadCommand(),
-        ["UNDO"] = new UndoCommand(),
-        ["REDO"] = new RedoCommand()
-        };
         private string PlayerInput(){ //Allows for player to input commands or seek help.
             bool incomplete = true;
             string input = "";
             while (incomplete){
                 Console.Write("Input:");
                 input = Console.ReadLine();
-                UICommand command; //Checking Strategy to see if a command was entered.
-                if(CommandStrategies.TryGetValue(input, out command!)){
-                    command.Execute(); //Command is executed
-                    continue; //Input resumes after command execution
-                }
                 incomplete = false;
             }
-            return input;
-            
-
-        }
+            return input!;}
     public void DisplayMessage(string message){ //To keep things logically consistent, ConsoleUI is
         Console.WriteLine(message);             //always in charge of displaying messages to the player.
     }

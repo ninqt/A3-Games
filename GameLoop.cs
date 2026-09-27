@@ -19,6 +19,9 @@ public class GameLoop{
         while(!gameComplete){
             for(int x = 0 ; x < players.Length; x++){
                 Player currentPlayer = players[x];
+                bool turnOver = CommandPhase(currentPlayer); //Command phase allows players to enter system commands
+                if(turnOver == true){
+                    continue;}
                 Report turnReport = PlayerTurn(currentPlayer);
                 gameComplete = CheckGameEnd(currentPlayer,turnReport);
                 if(gameComplete == true){
@@ -30,10 +33,6 @@ public class GameLoop{
     }
 
     private Report PlayerTurn(Player currentPlayer){
-        Console.Clear();
-        renderEngine.DrawAllBoards();
-        ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
-        //Insert Command entering window here?
         Move playerMove = currentPlayer.PlayerTurn(rules);
         PerformTurn(playerMove);
         Report checkForResult = rules.CheckWin(playerMove);
@@ -50,7 +49,7 @@ public class GameLoop{
         selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
 
-    public bool CheckGameEnd(Player currentPlayer, Report turnReport){
+    private bool CheckGameEnd(Player currentPlayer, Report turnReport){
         switch(turnReport.Result){
             case Result.nothing:
             return false;
@@ -66,5 +65,48 @@ public class GameLoop{
         }
         return false; //Just incase
     }
+
+    private bool CommandPhase(Player currentPlayer){
+        Console.Clear();
+        renderEngine.DrawAllBoards();
+        ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
+        bool incomplete = true;
+        string input = "";
+        while (incomplete)
+        {
+            ConsoleUI.Instance.DisplayMessage("Press ENTER KEY to begin turn or HELP to see a list of useable commands and game instructions.");
+            try
+            {
+                input = Console.ReadLine(); //TODO: Should go through consoleUI   
+                bool turnOver = CheckCommands(input);
+                if(input == ""){
+                    return false;}
+                if(turnOver == false){
+                    continue;}
+                else{
+                    return true;}}
+            catch
+            {
+                continue;
+            }
+        }
+        return false;
+
+
+    }
+    private Dictionary<string, SystemCommand> CommandStrategies = new(){
+        ["HELP"] = new HelpCommand(), //Strategy pattern to allow user to select various commands
+        ["SAVE"] = new SaveCommand(),
+        ["UNDO"] = new UndoCommand(),
+        ["REDO"] = new RedoCommand()
+        };
+    private bool CheckCommands(String input){
+        SystemCommand command; //Checking Strategy to see if a command was entered.
+        if(CommandStrategies.TryGetValue(input, out command!)){
+            bool turnOver = command.Execute(); //Command is executed and game checks if turn is over due to undo/redo
+            return turnOver;
+            }
+        return false;}
+
 
 }

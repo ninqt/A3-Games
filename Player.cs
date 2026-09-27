@@ -12,7 +12,7 @@ public abstract class Player{
 public class HumanPlayer : Player {
     public override bool IsHuman => true;
 
-    public override Move PlayerTurn(Rules rules){ //TODO: Should return move, mayube also move to player class.
+    public override Move PlayerTurn(Rules rules){ //We should get player input and then determine course of action.
         int selectedBoardNumber = GetBoardChoice(rules);
         List<Piece> avaliablePieces = rules.AvaliablePieces(this);
         Piece selectedPiece = GetPieceChoice(avaliablePieces);
@@ -71,10 +71,11 @@ public class HumanPlayer : Player {
                 continue;}}
         return boardNumber;}}
 
+
 public class AIPlayer : Player {
     public override bool IsHuman => false;
 
-    public override Move PlayerTurn(Rules rules){ //TODO: ALL OF THIS IS TEMP TO KEEP COMPILER HAPPY
+    public override Move PlayerTurn(Rules rules){
         for(int x = 0; x < rules.BoardList.Count ; x++)
         {
             Board board = rules.BoardList[x];
@@ -109,6 +110,7 @@ public class AIPlayer : Player {
         return randomMove;
     }
     }
+
 
 
 
