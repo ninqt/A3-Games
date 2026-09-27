@@ -56,7 +56,7 @@ public class GomokuRules : Rules
 			int count = 1;
 			count += CountDirection(board, space, rowStep, colStep, placed.Value);
 			count += CountDirection(board, space, -rowStep, -colStep, placed.Value);
-			if (count >= WinLength) new Report(Result.win,$"Player {move.PlayerNumber} has won the game.");;
+			if (count >= WinLength) return new Report(Result.win,$"Player {move.PlayerNumber} has won the game.");;
 		}
 		return new Report();
 	}

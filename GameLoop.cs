@@ -11,7 +11,7 @@ public class GameLoop{
         this.rules = selectedRules;
         this.players = players;
         renderEngine = new RenderEngine(rules.BoardList);
-        historyEngine = new HistoryEngine(rules.BoardList);
+        historyEngine = new HistoryEngine(rules);
     }
 
     public void RunGame(){
@@ -23,9 +23,12 @@ public class GameLoop{
                 if(turnOver == true){
                     continue;}
                 Report turnReport = PlayerTurn(currentPlayer);
-                gameComplete = CheckGameEnd(currentPlayer,turnReport);
+                gameComplete = CheckGameEnd(turnReport);
                 if(gameComplete == true){
-                    ConsoleUI.Instance.DisplayMessage("The program will now exit.");
+                    ConsoleUI.Instance.DisplayMessage("The program will now exit. Press any key");
+                    gameComplete = true;
+                    Console.ReadKey();
+                    break;
                     //TODO: Need more of a hard exit. ALSO. Any save file here should be erased(?)
                 }
             }
@@ -49,7 +52,7 @@ public class GameLoop{
         selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
 
-    private bool CheckGameEnd(Player currentPlayer, Report turnReport){
+    private bool CheckGameEnd(Report turnReport){
         switch(turnReport.Result){
             case Result.nothing:
             return false;
