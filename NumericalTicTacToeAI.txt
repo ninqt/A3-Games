@@ -7,12 +7,12 @@ public class NumericalTicTacToeAI{ //Object that contains the set of hueristics 
         this.board = board;
         this.rules = rules;
         this.renderEngine = renderEngine;}
-    public bool AITurn(List<int> avaliablePieces){ //Method that performs computer's turn
+    public bool AITurn(List<int> availablePieces){ //Method that performs computer's turn
         List<Point> avaliableSpaces = board.GetAvaliableSpaces(); //Get all free spaces
-        bool winFound = FindWin(avaliablePieces,avaliableSpaces); //Looking for a win first
+        bool winFound = FindWin(availablePieces,avaliableSpaces); //Looking for a win first
         if(winFound){
             return true;} //Tell TTT computer found a win
-        RandomMove(avaliablePieces,avaliableSpaces); //Random move if no win found
+        RandomMove(availablePieces,avaliableSpaces); //Random move if no win found
         return false;} //Tell TTT computer did not find a win
     private bool FindWin(List<int> pieces, List<Point> spaces){ //Checks every given space and piece to find a win
         foreach(Point space in spaces){

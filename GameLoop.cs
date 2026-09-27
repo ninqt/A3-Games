@@ -94,8 +94,7 @@ public class GameLoop{
 
 
     }
-    private Dictionary<string, SystemCommand> CommandStrategies = new(){
-        ["HELP"] = new HelpCommand(), //Strategy pattern to allow user to select various commands
+    private Dictionary<string, SystemCommand> CommandStrategies = new(){ //Strategy pattern to allow user to select various commands
         ["SAVE"] = new SaveCommand(),
         ["UNDO"] = new UndoCommand(),
         ["REDO"] = new RedoCommand()
@@ -106,7 +105,20 @@ public class GameLoop{
             bool turnOver = command.Execute(); //Command is executed and game checks if turn is over due to undo/redo
             return turnOver;
             }
+        if(input == "HELP"){
+            HelpCommand();
+        }
         return false;}
-
+    private void HelpCommand(){
+        string gameHelp = "---Game Description---";
+        gameHelp = gameHelp + "\n" + $"You are playing {rules.GameName}" + "\n" + rules.GameDescription;
+        ConsoleUI.Instance.DisplayMessage(gameHelp);
+        string commandsHelp = "---Commands---";
+        string saveHelp = "SAVE - Saves the current state of play and exits the program";
+        string undoHelp = "UNDO - Undo the last move taken by a player";
+        string redoHelp = "REDO - Redo the last move that was undone. This can be done for as many undos taken";
+        commandsHelp = commandsHelp + "\n" + saveHelp + "\n" + undoHelp + "\n" + redoHelp;
+        ConsoleUI.Instance.DisplayMessage(commandsHelp);
+    }
 
 }

@@ -14,24 +14,24 @@ public class HumanPlayer : Player {
 
     public override Move PlayerTurn(Rules rules){ //We should get player input and then determine course of action.
         int selectedBoardNumber = GetBoardChoice(rules);
-        List<Piece> avaliablePieces = rules.AvaliablePieces(this);
-        Piece selectedPiece = GetPieceChoice(avaliablePieces);
+        List<Piece> availablePieces = rules.AvailablePieces(this);
+        Piece selectedPiece = GetPieceChoice(availablePieces);
         Board board = rules.BoardList[selectedBoardNumber];
         Point selectedSpace = GetSpaceChoice(board);
         Move confirmedMove = new Move(selectedPiece,playerNumber,selectedBoardNumber,selectedSpace);
         return confirmedMove;}
-    private Piece GetPieceChoice(List<Piece> avaliablePieces){
-        if(avaliablePieces.TrueForAll(piece => piece.Value == avaliablePieces[0].Value) == true){
-            return avaliablePieces[0];} //TODO: Need to workaround there only being one piece in pool in NTTT
+    private Piece GetPieceChoice(List<Piece> availablePieces){
+        if(availablePieces.TrueForAll(piece => piece.Value == availablePieces[0].Value) == true){
+            return availablePieces[0];} //TODO: Need to workaround there only being one piece in pool in NTTT
         string messageString = "Avaliable Pieces:";
-        for(int x = 0; x < avaliablePieces.Count; x++){
-            messageString = messageString + " " + avaliablePieces[x].Value;}
+        for(int x = 0; x < availablePieces.Count; x++){
+            messageString = messageString + " " + availablePieces[x].Value;}
         ConsoleUI.Instance.DisplayMessage(messageString);
         Piece selectedPiece = null!;
         while(selectedPiece == null){
             try{
                 int playerInput = ConsoleUI.Instance.PromptInteger("Please select a piece to use.");
-                selectedPiece = avaliablePieces.Find(piece => piece.Value == playerInput)!;}
+                selectedPiece = availablePieces.Find(piece => piece.Value == playerInput)!;}
             catch{
                 ConsoleUI.Instance.DisplayMessage("You did not select a valid piece. Try again.");
                 continue;}}
@@ -80,16 +80,16 @@ public class AIPlayer : Player {
         {
             Board board = rules.BoardList[x];
             List<Point> avaliableSpaces = board.GetAvaliableSpaces(); //Get all free spaces
-            List<Piece> avaliablePieces = rules.AvaliablePieces(this);
-            Move winningMove = FindWin(avaliablePieces,avaliableSpaces,board,rules,x); //Looking for a win first
+            List<Piece> availablePieces = rules.AvailablePieces(this);
+            Move winningMove = FindWin(availablePieces,avaliableSpaces,board,rules,x); //Looking for a win first
             if(winningMove != null){
                 return winningMove;}}
         Move randomMove = RandomMove(rules); //Random move if no win found
         return randomMove;
         }
-    private Move FindWin(List<Piece> avaliablePieces,List<Point> avaliableSpaces,Board board,Rules rules, int boardNumber){
+    private Move FindWin(List<Piece> availablePieces,List<Point> avaliableSpaces,Board board,Rules rules, int boardNumber){
         foreach(Point space in avaliableSpaces){
-            foreach(Piece piece in avaliablePieces){
+            foreach(Piece piece in availablePieces){
                 board.SetPiece(piece.Value,space); //Placing piece on board
                 Move move = new Move(piece,this.playerNumber,boardNumber,space);
                 Report possibleWin = rules.CheckWin(move); //Checking if there are any wins using that piece
@@ -102,7 +102,7 @@ public class AIPlayer : Player {
         Random rng = new Random();
         int randomBoardNumber = rng.Next(0,rules.BoardList.Count);
         Board randomBoard = rules.BoardList[randomBoardNumber];
-        List<Piece> pieces = rules.AvaliablePieces(this);
+        List<Piece> pieces = rules.AvailablePieces(this);
         Piece randomPiece = pieces[rng.Next(0,pieces.Count)];
         List<Point> spaces = randomBoard.GetAvaliableSpaces();
         Point randomSpace = spaces[rng.Next(0,spaces.Count)];

@@ -60,8 +60,8 @@ public class NumericalTicTacToeOld {
                     Console.WriteLine($"End of Player {x+1}'s turn. Press any key to continue.");}
                     Console.ReadKey();}}}
     private bool ComputerTurn(int player){ //Method that tells computer to take a turn
-        List<int> avaliablePieces = AvaliablePieces(player);
-        bool gameWon = ai.AITurn(avaliablePieces);
+        List<int> availablePieces = AvailablePieces(player);
+        bool gameWon = ai.AITurn(availablePieces);
         return gameWon;}
     private bool PlayerTurn(int player){ //Method that goes through other methods that make up a human player's turn
         int chosenPiece = PlayerSelectPiece(player); //Get piece
@@ -72,9 +72,9 @@ public class NumericalTicTacToeOld {
         bool gameWon = CheckWin(chosenSpace); //Check if player won
         return gameWon;}
     private int PlayerSelectPiece(int player){ //Method for prompting player to select a piece
-        List<int> avaliablePieces = AvaliablePieces(player); //Get pieces owned by player
+        List<int> availablePieces = AvailablePieces(player); //Get pieces owned by player
         string piecesUI = "Your Pieces: ";
-        foreach(int piece in avaliablePieces){
+        foreach(int piece in availablePieces){
             piecesUI = piecesUI + $"{piece} ";} //Preparing to display owned pieces
         bool selectionIncomplete = true;
         int chosenPiece = 0;
@@ -82,7 +82,7 @@ public class NumericalTicTacToeOld {
             Console.WriteLine("Please enter a piece to use or type HELP for help.");
             Console.WriteLine(piecesUI);
             int input = PromptNumberInput("Piece:"); // Ask player for piece
-            if(avaliablePieces.Contains(input) == false){ //Checking input is a valid piece owned by player.
+            if(availablePieces.Contains(input) == false){ //Checking input is a valid piece owned by player.
                 Console.WriteLine("Invalid piece chosen. Please choose one from your avaliable pieces.");
                 continue;}
             chosenPiece = input;
@@ -109,15 +109,15 @@ public class NumericalTicTacToeOld {
                 continue;}
             selectionIncomplete = false;}
         return space;}
-    private List<int> AvaliablePieces(int player){ //Method that returns avaliable pieces of given player number
+    private List<int> AvailablePieces(int player){ //Method that returns avaliable pieces of given player number
         int[] pieces = board.Pieces; //Get list of pieces from board
-        List<int> avaliablePieces = new List<int>() ;
+        List<int> availablePieces = new List<int>() ;
         for(int x = 1; x < pieces.Length; x++ ){ // Let's calculate if a piece is owned by the player
             int currentPiece = pieces[x];
             if(currentPiece != 0 && System.Int32.IsOddInteger(player) == System.Int32.IsOddInteger(currentPiece)){}
             else if(currentPiece != 0){ // We and make sure the piece is not on the board and is owned by the player using above.
-                avaliablePieces.Add(currentPiece);}}
-        return avaliablePieces;}
+                availablePieces.Add(currentPiece);}}
+        return availablePieces;}
     private int PromptNumberInput(string prompt){ //Generic method for prompting player numerical input
         bool incomplete = true;                   //The argument allows a "prompt" to be displayed to the player
         int chosenNumber = 0;
