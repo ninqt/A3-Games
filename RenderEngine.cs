@@ -5,7 +5,7 @@ public class RenderEngine { //Draws the board to the screen so that the user can
     private string blankSpace = ""; //Property that contains padding for blank spaces
     public RenderEngine(List<Board> boardList){
         this.boardList = boardList;
-        for( int x = 0; x < System.Convert.ToString(boardList[0].MaxSpace).Length; x++){
+        for( int x = 0; x < System.Convert.ToString(boardList[0].Pieces[^1].Value).Length; x++){
             blankSpace = blankSpace + ".";}}
 
     public void DrawAllBoards(){
@@ -15,7 +15,7 @@ public class RenderEngine { //Draws the board to the screen so that the user can
     }
     public void DrawBoard(Board board) {
         for(int x = 1; x <= board.BoardSize; x++){ //Loop over each row and draw rows to screen
-            string line = System.Convert.ToString(x) + ") "; // Label row
+            string line = x.ToString($"D{System.Convert.ToString(board.BoardSize).Length}") + ") "; // Label row
             for(int y = 1; y <= board.BoardSize; y++){// Loop over each space
                 Point space = new Point(x,y);
                 string spaceRender = "";
