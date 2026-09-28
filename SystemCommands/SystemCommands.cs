@@ -18,7 +18,6 @@ public class SaveCommand : SystemCommand {
         this.gameLoop = gameLoop;
     }
     public bool Execute() {
-        Console.WriteLine("Moopy");
         bool savesuccess = SaveEngine.Instance.SaveGame(gameLoop,rules);
         if(savesuccess){
             ConsoleUI.Instance.DisplayMessage("Saving game sucessful. Feel free to quit or keep playing.");
@@ -30,7 +29,25 @@ public class SaveCommand : SystemCommand {
     }
 }
 
-
+public class LoadCommand : SystemCommand{
+    GameSetup gameSetup;
+    public LoadCommand(GameSetup gameSetup){
+        this.gameSetup = gameSetup;
+    }
+    public bool Execute(){
+        bool checkFile = SaveEngine.Instance.CheckSaveFile();
+        if(checkFile){
+            ConsoleUI.Instance.DisplayMessage("Save file found. Press any key to load.");
+            Console.ReadKey();
+            SaveFile save = SaveEngine.Instance.GetSaveFile();
+            gameSetup.LoadSave(save);
+        }
+        else{
+            ConsoleUI.Instance.DisplayMessage("No save file found. Try SAVE first.");
+        }
+        return false;
+    }
+}
 
 public class UndoCommand : SystemCommand{
     public bool Execute(){

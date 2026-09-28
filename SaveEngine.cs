@@ -12,12 +12,12 @@ public class SaveEngine{
     }
     public bool SaveGame(GameLoop gameLoop,Rules rules){
         List<Move> moveHistory = HistoryEngine.Instance.MoveHistory.ToList();
-        bool[] playerTypes = gameLoop.Players.Select(player => player.IsHuman).ToArray();
+        GameMode mode = gameLoop.Mode;
         int turnIndex = gameLoop.TurnIndex;
+        int boardSize = rules.BoardList[0].BoardSize;
         GameType gameType = rules.GameType;
-        SaveFile saveFile = new SaveFile(moveHistory,gameType,playerTypes,turnIndex);
+        SaveFile saveFile = new SaveFile(moveHistory,gameType,mode,turnIndex,boardSize);
         string jsonString = JsonSerializer.Serialize(saveFile);
-        Console.WriteLine(jsonString);
         try
         {
             File.WriteAllText(FILENAME,jsonString);
@@ -28,6 +28,20 @@ public class SaveEngine{
         }
         return true;
     }
+
+    public bool CheckSaveFile(){ //Other objects can check wether a current save exists.
+        return File.Exists(FILENAME);
+    }
+    public SaveFile GetSaveFile(){
+        SaveFile saveFile;
+        try{
+            string saveJson = File.ReadAllText(FILENAME);
+            saveFile = JsonSerializer.Deserialize<SaveFile>(saveJson)!;
+            return saveFile;}
+        catch{
+            ConsoleUI.Instance.DisplayMessage("ERROR: Save file is corrupted or missing.");}
+        return null!;
+    }
 }
 
 
@@ -35,15 +49,18 @@ public class SaveEngine{
 public class SaveFile{
     public List<Move> MoveHistory {get; set;}
     public GameType GameType {get; set;}
-    public bool[] PlayerTypes {get; set;}
+    public GameMode Mode {get; set;}
 
     public int TurnIndex {get; set;}
 
-    public SaveFile(List<Move>moveHistory,GameType gameType,bool[]playerTypes,int turnIndex){
+    public int BoardSize {get; set;}
+
+    public SaveFile(List<Move>moveHistory,GameType gameType,GameMode mode,int turnIndex,int boardSize){
         this.MoveHistory = moveHistory;
         this.GameType = gameType;
-        this.PlayerTypes = playerTypes;
+        this.Mode = mode;
         this.TurnIndex = turnIndex;
+        this.BoardSize = boardSize;
     }
 
 }

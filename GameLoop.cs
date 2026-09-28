@@ -10,15 +10,21 @@ public class GameLoop{
     public Player[] Players {get{return players;}}
     public int TurnIndex{get{return turnIndex;} set{turnIndex = value;}}
 
+    public GameMode Mode {get; set;}
+    private bool gameComplete = false;
 
-    public GameLoop(Rules selectedRules,Player[] players){
+
+
+    public GameLoop(Rules selectedRules,Player[] players, GameMode mode,GameSetup setup){
         this.rules = selectedRules;
         this.players = players;
+        this.Mode = mode;
         renderEngine = new RenderEngine(rules.BoardList);
-        historyEngine = new HistoryEngine(rules);
+        historyEngine = HistoryEngine.Instance;
         CommandStrategies = new()
         {
         ["SAVE"] = new SaveCommand(rules, this),
+        ["LOAD"] = new LoadCommand(setup),
         ["UNDO"] = new UndoCommand(),
         ["REDO"] = new RedoCommand()
         };
@@ -32,6 +38,8 @@ public class GameLoop{
                 Player currentPlayer = players[x];
                 bool turnOver = CommandPhase(currentPlayer); //Command phase allows players to enter system commands
                 if(turnOver == true){
+                    if(gameComplete){
+                        break;}
                     continue;}
                 Report turnReport = PlayerTurn(currentPlayer);
                 gameComplete = CheckGameEnd(turnReport);
@@ -58,7 +66,7 @@ public class GameLoop{
         return checkForResult;
         }
 
-    private void PerformTurn(Move move){
+    public void PerformTurn(Move move){
         Board selectedBoard = rules.BoardList[move.BoardNumber];
         selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
@@ -129,6 +137,10 @@ public class GameLoop{
         string redoHelp = "REDO - Redo the last move that was undone. This can be done for as many undos taken";
         commandsHelp = commandsHelp + "\n" + saveHelp + "\n" + undoHelp + "\n" + redoHelp;
         ConsoleUI.Instance.DisplayMessage(commandsHelp);
+    }
+
+    public void StopRunning(){
+        gameComplete = false;
     }
 
 }

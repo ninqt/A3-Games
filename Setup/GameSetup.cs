@@ -2,26 +2,43 @@
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
-public class GameSetup(){ //Game setup script
-    
+public class GameSetup{ //Game setup/controller script
+    private GameLoop gameLoop;
 
-    private Dictionary<GameType,Rules> Games = new(){
+    private Dictionary<GameType,Rules> games = new(){
         [GameType.NumericalTicTacToe] = new NumericalTicTacToe(), //New Games can be added to this strategy
         [GameType.Gomoku] = new GomokuRules(),
         [GameType.Notakto] = new NotaktoRules()
 
     };
 
+    public GameSetup(){
+        SaveEngine saveEngine = new SaveEngine();
+
+    }
 
 
     public void SetupGame(){ //Sets up and initialises the game
         ConsoleUI.Instance.DisplayMessage("Welcome to the IFQ584 A3 Game Program.");
-        SaveEngine saveEngine = new SaveEngine();
         Rules selectedRules = RulesFactory();
-        Player[] players = PlayersFactory();
-        GameLoop gameLoop = new GameLoop(selectedRules,players);
+        GameMode mode = ModeSelection();
+        Player[] players = PlayersFactory(mode);
+        HistoryEngine historyEngine = new HistoryEngine(selectedRules);
+        gameLoop = new GameLoop(selectedRules,players,mode,this);
         gameLoop.RunGame(); }
 
+    public void LoadSave(SaveFile save){
+        gameLoop.StopRunning();
+        Rules loadedRules = games[save.GameType];
+        loadedRules.SetupRules(save.BoardSize);
+        Player[] players = PlayersFactory(save.Mode);
+        HistoryEngine historyEngine = new HistoryEngine(loadedRules);
+        historyEngine.MoveHistory = save.MoveHistory;
+        gameLoop = new GameLoop(loadedRules,players,save.Mode,this);
+        foreach(Move move in save.MoveHistory){
+            gameLoop.PerformTurn(move);
+        }
+        gameLoop.RunGame();}
 
     public Rules RulesFactory(){ //Obtains inputs from player to select and create rules
         Rules selectedRules = RulesSelection();
@@ -34,8 +51,8 @@ public class GameSetup(){ //Game setup script
 
     private string GetGames(){
         string listOfGames = "";
-        for(int x = 1; x <= Games.Count ; x++ ){
-            string gameString = $"{x}: {Games[(GameType)x].GameName}";
+        for(int x = 1; x <= games.Count ; x++ ){
+            string gameString = $"{x}: {games[(GameType)x].GameName}";
             listOfGames = listOfGames + gameString + "\n";
         }
         return listOfGames;
@@ -50,7 +67,7 @@ public class GameSetup(){ //Game setup script
         while(incomplete){
             try{
                 gameSelection = ConsoleUI.Instance.PromptInteger(promptString);
-                selectedGame = Games[(GameType)gameSelection];
+                selectedGame = games[(GameType)gameSelection];
                 break;
             }
             catch{
@@ -70,34 +87,33 @@ public class GameSetup(){ //Game setup script
             break;}
         return boardSize;}
 
-    public int ModeSelection(){
+    public GameMode ModeSelection(){
         string promptString = "Please select a mode to play:\n1: Human v Human\n2: Human v Computer";
         bool incomplete = true;
-        int mode = 0;
+        GameMode mode = 0;
         while(incomplete){
-            mode = ConsoleUI.Instance.PromptInteger(promptString);
-            if(mode != 1 && mode != 2){
+            mode = (GameMode)ConsoleUI.Instance.PromptInteger(promptString);
+            if(mode != GameMode.HumanVComputer && mode != GameMode.HumanVHuman){
                 ConsoleUI.Instance.DisplayMessage("Mode must be a listed mode. Please try again.");
                 continue;}
             else{
                 break;}}
         return mode;}
 
-    private Player[] PlayersFactory(){
-        int mode = ModeSelection();
+    private Player[] PlayersFactory(GameMode mode){
         Player[] players = PlayerSetup(mode);
         return players;
     }
 
-    private Player[] PlayerSetup(int mode){
+    private Player[] PlayerSetup(GameMode mode){
         Player[] players = new Player[2];
         switch(mode){
-            case 1:
+            case GameMode.HumanVHuman:
                 players[0] = new HumanPlayer();
                 players[1] = new HumanPlayer();
                 break;
             
-            case 2:
+            case GameMode.HumanVComputer:
                 Random rng = new Random();
                 players[0] = new HumanPlayer();
                 players[1] = new AIPlayer();
@@ -116,4 +132,9 @@ public enum GameType{
     NumericalTicTacToe = 1,
     Gomoku,
     Notakto
+}
+
+public enum GameMode{
+    HumanVHuman = 1,
+    HumanVComputer
 }
