@@ -2,17 +2,28 @@ using System.Drawing;
 
 public class GameLoop{
     private List<Board> boardList = null!; // List of gameboards
+    int turnIndex = 0;
     private Player[] players = new Player[2]; //Array of players
     private RenderEngine renderEngine = null!;
     private HistoryEngine historyEngine = null!;
     private Rules rules = null!;
+    public Player[] Players {get{return players;}}
+    public int TurnIndex{get{return turnIndex;} set{turnIndex = value;}}
+
 
     public GameLoop(Rules selectedRules,Player[] players){
         this.rules = selectedRules;
         this.players = players;
         renderEngine = new RenderEngine(rules.BoardList);
         historyEngine = new HistoryEngine(rules);
-    }
+        CommandStrategies = new()
+        {
+        ["SAVE"] = new SaveCommand(rules, this),
+        ["UNDO"] = new UndoCommand(),
+        ["REDO"] = new RedoCommand()
+        };
+        }
+    
 
     public void RunGame(){
         bool gameComplete = false;
@@ -97,11 +108,7 @@ public class GameLoop{
 
 
     }
-    private Dictionary<string, SystemCommand> CommandStrategies = new(){ //Strategy pattern to allow user to select various commands
-        ["SAVE"] = new SaveCommand(),
-        ["UNDO"] = new UndoCommand(),
-        ["REDO"] = new RedoCommand()
-        };
+    private Dictionary<string, SystemCommand> CommandStrategies; //Strategy pattern to allow user to select various commands
     private bool CheckCommands(String input){
         SystemCommand command; //Checking Strategy to see if a command was entered.
         if(CommandStrategies.TryGetValue(input, out command!)){

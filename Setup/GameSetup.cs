@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 public class GameSetup(){ //Game setup script
     
 
-    private Dictionary<int,Rules> Games = new(){
-        [1] = new NumericalTicTacToe(), //New Games can be added to this strategy
-        [2] = new GomokuRules(),
-        [3] = new NotaktoRules()
+    private Dictionary<GameType,Rules> Games = new(){
+        [GameType.NumericalTicTacToe] = new NumericalTicTacToe(), //New Games can be added to this strategy
+        [GameType.Gomoku] = new GomokuRules(),
+        [GameType.Notakto] = new NotaktoRules()
 
     };
 
@@ -16,6 +16,7 @@ public class GameSetup(){ //Game setup script
 
     public void SetupGame(){ //Sets up and initialises the game
         ConsoleUI.Instance.DisplayMessage("Welcome to the IFQ584 A3 Game Program.");
+        SaveEngine saveEngine = new SaveEngine();
         Rules selectedRules = RulesFactory();
         Player[] players = PlayersFactory();
         GameLoop gameLoop = new GameLoop(selectedRules,players);
@@ -34,7 +35,7 @@ public class GameSetup(){ //Game setup script
     private string GetGames(){
         string listOfGames = "";
         for(int x = 1; x <= Games.Count ; x++ ){
-            string gameString = $"{x}: {Games[x].GameName}";
+            string gameString = $"{x}: {Games[(GameType)x].GameName}";
             listOfGames = listOfGames + gameString + "\n";
         }
         return listOfGames;
@@ -49,7 +50,7 @@ public class GameSetup(){ //Game setup script
         while(incomplete){
             try{
                 gameSelection = ConsoleUI.Instance.PromptInteger(promptString);
-                selectedGame = Games[gameSelection];
+                selectedGame = Games[(GameType)gameSelection];
                 break;
             }
             catch{
@@ -111,3 +112,8 @@ public class GameSetup(){ //Game setup script
     
 
 
+public enum GameType{
+    NumericalTicTacToe = 1,
+    Gomoku,
+    Notakto
+}

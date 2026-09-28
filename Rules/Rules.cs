@@ -23,6 +23,7 @@ public abstract class Rules : IRules{
 
     public abstract string GameName {get;}
     public abstract string GameDescription {get;}
+    public abstract GameType GameType {get;}
     public List<Board> BoardList {get {return boardList;}}
 
     protected abstract List<Board> BoardFactory(int boardSize = 0);

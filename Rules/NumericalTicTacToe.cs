@@ -9,6 +9,7 @@ public class NumericalTicTacToe : Rules, IRules {
     public override string GameName => "Numerical Tic Tac Toe";
 
     public override string GameDescription => $"The goal of this game is to get a row, column or diagonal line to add to {goal} when placing a piece.";
+    public override GameType GameType => GameType.NumericalTicTacToe;
     public override bool CustomBoard => true;
 
     public override void SetupRules(int boardSize){

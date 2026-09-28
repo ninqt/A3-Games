@@ -18,6 +18,8 @@ public class GomokuRules : Rules
 
     public override string GameName => "Gomoku";
     public override string GameDescription => "Get five in a row, horizontally, vertically, or diagonally, to win.";
+    public override GameType GameType => GameType.Gomoku;
+
 
     public override bool CustomBoard => false;
 

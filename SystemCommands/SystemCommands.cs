@@ -11,7 +11,21 @@ public class HelpCommand : SystemCommand {
 }
 
 public class SaveCommand : SystemCommand {
+    Rules rules;
+    GameLoop gameLoop;
+    public SaveCommand(Rules rules, GameLoop gameLoop){
+        this.rules = rules;
+        this.gameLoop = gameLoop;
+    }
     public bool Execute() {
+        Console.WriteLine("Moopy");
+        bool savesuccess = SaveEngine.Instance.SaveGame(gameLoop,rules);
+        if(savesuccess){
+            ConsoleUI.Instance.DisplayMessage("Saving game sucessful. Feel free to quit or keep playing.");
+        }
+        else{
+            ConsoleUI.Instance.DisplayMessage("Saving unsuccessful. Please try again.");
+        }
         return false;
     }
 }
