@@ -2,17 +2,34 @@ using System.Drawing;
 
 public class GameLoop{
     private List<Board> boardList = null!; // List of gameboards
+    int turnIndex = 0;
     private Player[] players = new Player[2]; //Array of players
     private RenderEngine renderEngine = null!;
     private HistoryEngine historyEngine = null!;
     private Rules rules = null!;
+    public Player[] Players {get{return players;}}
+    public int TurnIndex{get{return turnIndex;} set{turnIndex = value;}}
 
-    public GameLoop(Rules selectedRules,Player[] players){
+    public GameMode Mode {get; set;}
+    private bool gameComplete = false;
+
+
+
+    public GameLoop(Rules selectedRules,Player[] players, GameMode mode,GameSetup setup){
         this.rules = selectedRules;
         this.players = players;
+        this.Mode = mode;
         renderEngine = new RenderEngine(rules.BoardList);
-        historyEngine = new HistoryEngine(rules);
-    }
+        historyEngine = HistoryEngine.Instance;
+        CommandStrategies = new()
+        {
+        ["SAVE"] = new SaveCommand(rules, this),
+        ["LOAD"] = new LoadCommand(setup),
+        ["UNDO"] = new UndoCommand(),
+        ["REDO"] = new RedoCommand()
+        };
+        }
+    
 
     public void RunGame(){
         bool gameComplete = false;
@@ -21,6 +38,8 @@ public class GameLoop{
                 Player currentPlayer = players[x];
                 bool turnOver = CommandPhase(currentPlayer); //Command phase allows players to enter system commands
                 if(turnOver == true){
+                    if(gameComplete){
+                        break;}
                     continue;}
                 Report turnReport = PlayerTurn(currentPlayer);
                 gameComplete = CheckGameEnd(turnReport);
@@ -47,7 +66,7 @@ public class GameLoop{
         return checkForResult;
         }
 
-    private void PerformTurn(Move move){
+    public void PerformTurn(Move move){
         Board selectedBoard = rules.BoardList[move.BoardNumber];
         selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
@@ -97,11 +116,7 @@ public class GameLoop{
 
 
     }
-    private Dictionary<string, SystemCommand> CommandStrategies = new(){ //Strategy pattern to allow user to select various commands
-        ["SAVE"] = new SaveCommand(),
-        ["UNDO"] = new UndoCommand(),
-        ["REDO"] = new RedoCommand()
-        };
+    private Dictionary<string, SystemCommand> CommandStrategies; //Strategy pattern to allow user to select various commands
     private bool CheckCommands(String input){
         SystemCommand command; //Checking Strategy to see if a command was entered.
         if(CommandStrategies.TryGetValue(input, out command!)){
@@ -122,6 +137,10 @@ public class GameLoop{
         string redoHelp = "REDO - Redo the last move that was undone. This can be done for as many undos taken";
         commandsHelp = commandsHelp + "\n" + saveHelp + "\n" + undoHelp + "\n" + redoHelp;
         ConsoleUI.Instance.DisplayMessage(commandsHelp);
+    }
+
+    public void StopRunning(){
+        gameComplete = false;
     }
 
 }

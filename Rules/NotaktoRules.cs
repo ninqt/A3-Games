@@ -13,6 +13,7 @@ public class NotaktoRules : Rules
 
     public override string GameName => "Notakto";
     public override string GameDescription => "Three shared 3x3 boards, all pieces are X. Complete three-in-a-row on the last live board and you lose.";
+    public override GameType GameType => GameType.Notakto;
     public override bool CustomBoard => false;
 
     public override void SetupRules(int boardSize = 0) // param ignored - board size is fixed
