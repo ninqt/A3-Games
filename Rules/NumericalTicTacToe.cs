@@ -1,6 +1,6 @@
 using System.Drawing;
 
-public class NumericalTicTacToe : Rules, IRules {
+public class NumericalTicTacToe : Rules, IRules { //TODO: Should be called NumericalTicTacToeRules
     private bool customBoard = true;
 
 

@@ -24,7 +24,7 @@ public class GameLoop{
         CommandStrategies = new()
         {
         ["SAVE"] = new SaveCommand(rules, this),
-        ["LOAD"] = new LoadCommand(setup),
+        ["LOAD"] = new LoadCommand(setup,rules),
         ["UNDO"] = new UndoCommand(),
         ["REDO"] = new RedoCommand()
         };
@@ -127,7 +127,7 @@ public class GameLoop{
             HelpCommand();
         }
         return false;}
-    private void HelpCommand(){
+    private void HelpCommand(){ //TODO: Make this an actual command
         string gameHelp = "---Game Description---";
         gameHelp = gameHelp + "\n" + $"You are playing {rules.GameName}" + "\n" + rules.GameDescription;
         ConsoleUI.Instance.DisplayMessage(gameHelp);

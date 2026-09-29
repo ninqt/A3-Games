@@ -18,9 +18,10 @@ public class SaveEngine{
         GameType gameType = rules.GameType;
         SaveFile saveFile = new SaveFile(moveHistory,gameType,mode,turnIndex,boardSize);
         string jsonString = JsonSerializer.Serialize(saveFile);
+        string saveFileName = rules.GameName + FILENAME;
         try
         {
-            File.WriteAllText(FILENAME,jsonString);
+            File.WriteAllText(saveFileName,jsonString);
         }
         catch
         {
@@ -29,13 +30,13 @@ public class SaveEngine{
         return true;
     }
 
-    public bool CheckSaveFile(){ //Other objects can check wether a current save exists.
-        return File.Exists(FILENAME);
+    public bool CheckSaveFile(Rules rules){ //Other objects can check wether a current save exists.
+        return File.Exists(rules.GameName + FILENAME);
     }
-    public SaveFile GetSaveFile(){
+    public SaveFile GetSaveFile(Rules rules){
         SaveFile saveFile;
         try{
-            string saveJson = File.ReadAllText(FILENAME);
+            string saveJson = File.ReadAllText(rules.GameName + FILENAME);
             saveFile = JsonSerializer.Deserialize<SaveFile>(saveJson)!;
             return saveFile;}
         catch{
