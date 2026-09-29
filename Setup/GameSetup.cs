@@ -21,6 +21,10 @@ public class GameSetup{ //Game setup/controller script
     public void SetupGame(){ //Sets up and initialises the game
         ConsoleUI.Instance.DisplayMessage("Welcome to the IFQ584 A3 Game Program.");
         Rules selectedRules = RulesFactory();
+        if(SaveEngine.Instance.CheckSaveFile(selectedRules) && LoadSelection()){
+            SaveFile save = SaveEngine.Instance.GetSaveFile(selectedRules);
+            LoadSave(save);
+            return;}
         GameMode mode = ModeSelection();
         Player[] players = PlayersFactory(mode);
         HistoryEngine historyEngine = new HistoryEngine(selectedRules);
@@ -28,7 +32,7 @@ public class GameSetup{ //Game setup/controller script
         gameLoop.RunGame(); }
 
     public void LoadSave(SaveFile save){
-        gameLoop.StopRunning();
+        if(gameLoop != null) gameLoop.StopRunning();
         Rules loadedRules = games[save.GameType];
         loadedRules.SetupRules(save.BoardSize);
         Player[] players = PlayersFactory(save.Mode);
@@ -39,6 +43,18 @@ public class GameSetup{ //Game setup/controller script
             gameLoop.PerformTurn(move);
         }
         gameLoop.RunGame();}
+
+    public bool LoadSelection(){
+        bool incomplete = true;
+        while (incomplete){
+            string prompt = "A save file for this game has been detected. Types YES to load it and NO to start a new game.";
+            string input = ConsoleUI.Instance.PromptString(prompt);
+            switch(input){
+                case "YES":
+                return true;
+                case "NO":
+                return false;}}
+        return false;}
 
     public Rules RulesFactory(){ //Obtains inputs from player to select and create rules
         Rules selectedRules = RulesSelection();

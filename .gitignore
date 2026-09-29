@@ -2,3 +2,6 @@ bin/
 obj/
 .vs/
 SaveGame.json
+GomokuSaveGame.json
+Numerical Tic Tac ToeSaveGame.json
+NotaktoSaveGame.json
