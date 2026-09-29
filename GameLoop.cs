@@ -96,7 +96,7 @@ public class GameLoop{
             ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
             break;
             case false:
-            ConsoleUI.Instance.DisplayMessage($"It is the computer's turn.");
+            ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s (computer) turn.");
             break;}
         bool incomplete = true;
         string input = "";
