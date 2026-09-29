@@ -34,7 +34,7 @@ public class GameLoop{
     public void RunGame(){
         bool gameComplete = false;
         while(!gameComplete){
-            for(int x = 0 ; x < players.Length; x++){
+            for(int x = turnIndex ; x < players.Length; x++){
                 Player currentPlayer = players[x];
                 bool turnOver = CommandPhase(currentPlayer); //Command phase allows players to enter system commands
                 if(turnOver == true){
@@ -43,6 +43,7 @@ public class GameLoop{
                     continue;}
                 Report turnReport = PlayerTurn(currentPlayer);
                 gameComplete = CheckGameEnd(turnReport);
+                turnIndex = x + 1;
                 if(gameComplete == true){
                     ConsoleUI.Instance.DisplayMessage("The program will now exit. Press any key");
                     gameComplete = true;
@@ -51,6 +52,7 @@ public class GameLoop{
                     //TODO: Need more of a hard exit. ALSO. Any save file here should be erased(?)
                 }
             }
+            turnIndex = 0;
         }
     }
 
@@ -93,10 +95,10 @@ public class GameLoop{
         renderEngine.DrawAllBoards();
         switch (currentPlayer.IsHuman){
             case true:
-            ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
+            ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.PlayerNumber}'s turn.");
             break;
             case false:
-            ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s (computer) turn.");
+            ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.PlayerNumber}'s (computer) turn.");
             break;}
         bool incomplete = true;
         string input = "";

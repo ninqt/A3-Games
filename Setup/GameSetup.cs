@@ -35,10 +35,11 @@ public class GameSetup{ //Game setup/controller script
         if(gameLoop != null) gameLoop.StopRunning();
         Rules loadedRules = games[save.GameType];
         loadedRules.SetupRules(save.BoardSize);
-        Player[] players = PlayersFactory(save.Mode);
+        Player[] players = RestorePlayers(save);
         HistoryEngine historyEngine = new HistoryEngine(loadedRules);
         historyEngine.MoveHistory = save.MoveHistory;
         gameLoop = new GameLoop(loadedRules,players,save.Mode,this);
+        gameLoop.TurnIndex = save.TurnIndex;
         foreach(Move move in save.MoveHistory){
             gameLoop.PerformTurn(move);
         }
@@ -130,15 +131,32 @@ public class GameSetup{ //Game setup/controller script
                 break;
             
             case GameMode.HumanVComputer:
-                Random rng = new Random();
                 players[0] = new HumanPlayer();
                 players[1] = new AIPlayer();
-                rng.Shuffle(players);
+                Random rng = new Random();
+                rng.Shuffle(players);// Shuffling player order
                 break;}
         for(int x = 0; x < players.Length; x++ ){
-            players[x].playerNumber = x + 1; //Assigning player numbers
+            players[x].PlayerNumber = x + 1; //Assigning player numbers
         }
         return players;}
+
+    public Player[] RestorePlayers(SaveFile save){
+        Player[] newPlayers = new Player[2];
+        for(int x = 0; x < save.Players.Length; x++){
+            PlayerSaveData savedPlayer = save.Players[x];
+            Player restoredPlayer;
+            switch(savedPlayer.IsHuman){
+                case true:
+                restoredPlayer = new HumanPlayer();
+                break;
+                case false:
+                restoredPlayer = new AIPlayer();
+                break;}
+            restoredPlayer.PlayerNumber = savedPlayer.PlayerNumber;
+            newPlayers[x] = restoredPlayer;}
+        return newPlayers;
+    }
 
 }
     
