@@ -31,15 +31,17 @@ public class SaveCommand : SystemCommand {
 
 public class LoadCommand : SystemCommand{
     GameSetup gameSetup;
-    public LoadCommand(GameSetup gameSetup){
+    Rules rules;
+    public LoadCommand(GameSetup gameSetup, Rules rules){
         this.gameSetup = gameSetup;
+        this.rules = rules;
     }
     public bool Execute(){
-        bool checkFile = SaveEngine.Instance.CheckSaveFile();
+        bool checkFile = SaveEngine.Instance.CheckSaveFile(rules);
         if(checkFile){
             ConsoleUI.Instance.DisplayMessage("Save file found. Press any key to load.");
             Console.ReadKey();
-            SaveFile save = SaveEngine.Instance.GetSaveFile();
+            SaveFile save = SaveEngine.Instance.GetSaveFile(rules);
             gameSetup.LoadSave(save);
         }
         else{

@@ -24,7 +24,7 @@ public class GameLoop{
         CommandStrategies = new()
         {
         ["SAVE"] = new SaveCommand(rules, this),
-        ["LOAD"] = new LoadCommand(setup),
+        ["LOAD"] = new LoadCommand(setup,rules),
         ["UNDO"] = new UndoCommand(),
         ["REDO"] = new RedoCommand()
         };
@@ -91,7 +91,13 @@ public class GameLoop{
     private bool CommandPhase(Player currentPlayer){
         Console.Clear();
         renderEngine.DrawAllBoards();
-        ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
+        switch (currentPlayer.IsHuman){
+            case true:
+            ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s turn.");
+            break;
+            case false:
+            ConsoleUI.Instance.DisplayMessage($"It is player {currentPlayer.playerNumber}'s (computer) turn.");
+            break;}
         bool incomplete = true;
         string input = "";
         while (incomplete)
@@ -99,7 +105,7 @@ public class GameLoop{
             ConsoleUI.Instance.DisplayMessage("Press ENTER KEY to begin turn or HELP to see a list of useable commands and game instructions.");
             try
             {
-                input = Console.ReadLine(); //TODO: Should go through consoleUI   
+                input = ConsoleUI.Instance.PromptString(); //TODO: Should go through consoleUI   
                 bool turnOver = CheckCommands(input);
                 if(input == ""){
                     return false;}
@@ -127,7 +133,7 @@ public class GameLoop{
             HelpCommand();
         }
         return false;}
-    private void HelpCommand(){
+    private void HelpCommand(){ //TODO: Make this an actual command
         string gameHelp = "---Game Description---";
         gameHelp = gameHelp + "\n" + $"You are playing {rules.GameName}" + "\n" + rules.GameDescription;
         ConsoleUI.Instance.DisplayMessage(gameHelp);
