@@ -78,7 +78,7 @@ public class NumericalTicTacToe : Rules, IRules { //TODO: Should be called Numer
         List<Piece> availablePieces = new List<Piece>() ;
         for(int x = 0; x < pieces.Count; x++ ){ // Let's calculate if a piece is owned by the player
             Piece currentPiece = pieces[x];
-            if(System.Int32.IsOddInteger(player.playerNumber - 1) == System.Int32.IsOddInteger(currentPiece.Value)){}
+            if(System.Int32.IsOddInteger(player.PlayerNumber - 1) == System.Int32.IsOddInteger(currentPiece.Value)){}
             else{ // We and make sure the piece is not on the board and is owned by the player using above.
                 availablePieces.Add(currentPiece);}}
         return availablePieces;}

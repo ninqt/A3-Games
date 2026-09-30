@@ -4,7 +4,7 @@ using System.Drawing;
 public abstract class Player{
     public abstract bool IsHuman {get;}
 
-    public int playerNumber;
+    public int PlayerNumber {get; set;}
 
     public abstract Move PlayerTurn(Rules rules);
 }
@@ -18,7 +18,7 @@ public class HumanPlayer : Player {
         Piece selectedPiece = GetPieceChoice(availablePieces);
         Board board = rules.BoardList[selectedBoardNumber];
         Point selectedSpace = GetSpaceChoice(board);
-        Move confirmedMove = new Move(selectedPiece,playerNumber,selectedBoardNumber,selectedSpace);
+        Move confirmedMove = new Move(selectedPiece,PlayerNumber,selectedBoardNumber,selectedSpace);
         return confirmedMove;}
     private Piece GetPieceChoice(List<Piece> availablePieces){
         if(availablePieces.TrueForAll(piece => piece.Value == availablePieces[0].Value) == true){
@@ -96,7 +96,7 @@ public class AIPlayer : Player {
         foreach(Point space in avaliableSpaces){
             foreach(Piece piece in availablePieces){
                 board.SetPiece(piece.Value,space); //Placing piece on board
-                Move move = new Move(piece,this.playerNumber,boardNumber,space);
+                Move move = new Move(piece,this.PlayerNumber,boardNumber,space);
                 Report possibleWin = rules.CheckWin(move); //Checking if there are any wins using that piece
                 board.RemovePiece(space);
                 if(possibleWin.Result == Result.win){
@@ -121,7 +121,7 @@ public class AIPlayer : Player {
         Piece randomPiece = pieces[rng.Next(0,pieces.Count)];
         List<Point> spaces = randomBoard.GetAvaliableSpaces();
         Point randomSpace = spaces[rng.Next(0,spaces.Count)];
-        Move randomMove = new Move(randomPiece,this.playerNumber,randomBoardNumber,randomSpace);
+        Move randomMove = new Move(randomPiece,this.PlayerNumber,randomBoardNumber,randomSpace);
         return randomMove;
     }
     }
