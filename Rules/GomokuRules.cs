@@ -60,6 +60,8 @@ public class GomokuRules : Rules
 			count += CountDirection(board, space, -rowStep, -colStep, placed.Value);
 			if (count >= WinLength) return new Report(Result.win,$"Player {move.PlayerNumber} has won the game.");;
 		}
+        if(board.Pieces.Count == 0){
+            return new Report(Result.draw,$"Game ends in a draw due board being full.");}
 		return new Report();
 	}
 
