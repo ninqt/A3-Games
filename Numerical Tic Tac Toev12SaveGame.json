@@ -1,0 +1,1 @@
+{"MoveHistory":[{"Piece":{"Value":1,"RenderValue":"1"},"PlayerNumber":1,"BoardNumber":0,"Position":{"IsEmpty":false,"X":1,"Y":2}}],"GameType":1,"Mode":2,"Players":[{"IsHuman":false,"PlayerNumber":1},{"IsHuman":true,"PlayerNumber":2}],"TurnIndex":1,"BoardSize":3}
