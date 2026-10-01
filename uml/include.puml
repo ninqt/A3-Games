@@ -1,0 +1,300 @@
+@startuml
+class Move {
+    - playerNumber : int
+    - boardNumber : int
+    + PlayerNumber : int <<get>>
+    + BoardNumber : int <<get>>
+    + Move(piece:Piece, playerNumber:int, boardNumber:int, position:Point)
+}
+Move --> "piece" Piece
+Move --> "position" Point
+Move --> "Piece" Piece
+Move --> "Position" Point
+class Piece {
+    - value : int
+    - renderValue : string
+    + Value : int <<get>>
+    + RenderValue : string <<get>>
+    + Piece(value:int, renderValue:string)
+}
+enum Result {
+    nothing,
+    draw,
+    loss,
+    win,
+}
+class Report {
+    - message : string
+    + Message : string <<get>>
+    + Report(result:Result, message:String)
+}
+Report --> "result" Result
+Report --> "Result" Result
+class PointZeroException {
+    + PointZeroException()
+}
+class SpaceTakenException {
+    + SpaceTakenException()
+}
+class NoUndoAvailable {
+    + NoUndoAvailable()
+}
+class NoRedoAvailable {
+    + NoRedoAvailable()
+}
+Exception <|-- PointZeroException
+Exception <|-- SpaceTakenException
+Exception <|-- NoUndoAvailable
+Exception <|-- NoRedoAvailable
+class Board {
+    - boardSize : int
+    - maxSpace : int
+    - isLive : bool = true
+    + BoardSize : int <<get>>
+    + MaxSpace : int <<get>>
+    + IsLive : bool <<get>> <<set>>
+    + Board(n:int, pieces:List<Piece>)
+    + SetPiece(number:int, space:Point) : void
+    + RemovePiece(position:Point) : void
+    - {static} LocalToBoard(space:Point) : Point
+    + CheckSpace(space:Point) : void
+    + GetRow(space:Point) : Piece[]
+    + GetColumn(space:Point) : Piece[]
+    + GetNWDiagonal() : Piece[]
+    + GetNEDiagonal() : Piece[]
+    + GetAvaliableSpaces() : List<Point>
+    + GetPiece(space:Point) : Piece
+}
+class "List`1"<T> {
+}
+Board --> "pieces<Piece>" "List`1"
+Board --> "Pieces<Piece>" "List`1"
+class RenderEngine {
+    - blankSpace : string = ""
+    + RenderEngine(boardList:List<Board>)
+    + DrawAllBoards() : void
+    + DrawBoard(board:Board) : void
+}
+class "List`1"<T> {
+}
+RenderEngine --> "boardList<Board>" "List`1"
+class GameLoop {
+    - turnIndex : int = 0
+    + TurnIndex : int <<get>> <<set>>
+    - gameComplete : bool = false
+    + GameLoop(selectedRules:Rules, players:Player[], mode:GameMode, setup:GameSetup)
+    + RunGame() : void
+    - PlayerTurn(currentPlayer:Player) : Report
+    + PerformTurn(move:Move) : void
+    - CheckGameEnd(turnReport:Report) : bool
+    - CommandPhase(currentPlayer:Player) : bool
+    - CheckCommands(input:String) : bool
+    - HelpCommand() : void
+    + StopRunning() : void
+}
+class "List`1"<T> {
+}
+class "Dictionary`2"<T1,T2> {
+}
+GameLoop o-> "boardList<Board>" "List`1"
+GameLoop o-> "renderEngine" RenderEngine
+GameLoop o-> "historyEngine" HistoryEngine
+GameLoop o-> "rules" Rules
+GameLoop --> "Mode" GameMode
+GameLoop --> "CommandStrategies<string,SystemCommand>" "Dictionary`2"
+class HistoryEngine {
+    - {static} instance : HistoryEngine?
+    + HistoryEngine(rules:Rules)
+    + RecordMove(move:Move) : void
+    + Undo() : bool
+    + Redo() : bool
+}
+class "List`1"<T> {
+}
+HistoryEngine o-> "moveHistory<Move>" "List`1"
+HistoryEngine o-> "redoHistory<Move>" "List`1"
+HistoryEngine --> "rules" Rules
+HistoryEngine --> "Instance" HistoryEngine
+HistoryEngine --> "MoveHistory<Move>" "List`1"
+abstract class Player {
+    + {abstract} IsHuman : bool <<get>>
+    + PlayerNumber : int <<get>> <<set>>
+    + {abstract} PlayerTurn(rules:Rules) : Move
+}
+class HumanPlayer {
+    + <<override>> IsHuman : bool <<get>>
+    + <<override>> PlayerTurn(rules:Rules) : Move
+    - GetPieceChoice(availablePieces:List<Piece>) : Piece
+    - GetSpaceChoice(board:Board) : Point
+    - GetBoardChoice(rules:Rules) : int
+}
+class AIPlayer {
+    + <<override>> IsHuman : bool <<get>>
+    + <<override>> PlayerTurn(rules:Rules) : Move
+    - FindWin(availablePieces:List<Piece>, avaliableSpaces:List<Point>, board:Board, rules:Rules, boardNumber:int) : Move
+    - RandomMove(rules:Rules) : Move
+}
+Player <|-- HumanPlayer
+Player <|-- AIPlayer
+class SaveEngine {
+    <<const>> - FILENAME : string
+    <<const>> - VERSION : string = "v12"
+    + SaveEngine()
+    + SaveGame(gameLoop:GameLoop, rules:Rules) : bool
+    + CheckSaveFile(rules:Rules) : bool
+    + GetSaveFile(rules:Rules) : SaveFile
+}
+class SaveFile {
+    + TurnIndex : int <<get>> <<set>>
+    + BoardSize : int <<get>> <<set>>
+    + SaveFile(moveHistory:List<Move>, gameType:GameType, mode:GameMode, turnIndex:int, boardSize:int, players:PlayerSaveData[])
+}
+class PlayerSaveData {
+    + IsHuman : bool <<get>> <<set>>
+    + PlayerNumber : int <<get>> <<set>>
+    + PlayerSaveData(isHuman:bool, playerNumber:int)
+}
+class "List`1"<T> {
+}
+SaveEngine --> "instance" SaveEngine
+SaveEngine --> "Instance" SaveEngine
+SaveFile --> "MoveHistory<Move>" "List`1"
+SaveFile --> "GameType" GameType
+SaveFile --> "Mode" GameMode
+class NotaktoRules {
+    - <<const>> BoardSize : int = 3
+    - <<const>> BoardCount : int = 3
+    + NotaktoRules()
+    + <<override>> GameName : string <<get>>
+    + <<override>> GameDescription : string <<get>>
+    + <<override>> CustomBoard : bool <<get>>
+    + <<override>> SetupRules(boardSize:int) : void
+    # <<override>> BoardFactory(boardSize:int) : List<Board>
+    # <<override>> CreatePieceSet(boardSize:int) : List<Piece>
+    + <<override>> CheckWin(move:Move) : Report
+    - LineFilled(line:Piece[]) : bool
+    + <<override>> AvailablePieces(player:Player) : List<Piece>
+}
+Rules <|-- NotaktoRules
+NotaktoRules --> "GameType" GameType
+interface IRules {
+    SetupRules(boardSize:int) : void
+    CheckWin(move:Move) : Report
+    AvailablePieces(player:Player) : List<Piece>
+}
+abstract class Rules {
+    + {abstract} CustomBoard : bool <<get>>
+    - gameName : string = ""
+    + {abstract} GameName : string <<get>>
+    + {abstract} GameDescription : string <<get>>
+    # {abstract} BoardFactory(boardSize:int) : List<Board>
+    # {abstract} CreatePieceSet(boardSize:int) : List<Piece>
+    + {abstract} CheckWin(move:Move) : Report
+    + {abstract} SetupRules(boardSize:int) : void
+    + {abstract} AvailablePieces(player:Player) : List<Piece>
+}
+class "List`1"<T> {
+}
+IRules <|-- Rules
+Rules o-> "boardList<Board>" "List`1"
+Rules --> "GameType" GameType
+Rules --> "BoardList<Board>" "List`1"
+class GomokuRules {
+    - <<const>> BoardSize : int = 15
+    - <<const>> WinLength : int = 5
+    + GomokuRules()
+    + <<override>> GameName : string <<get>>
+    + <<override>> GameDescription : string <<get>>
+    + <<override>> CustomBoard : bool <<get>>
+    + <<override>> SetupRules(boardSize:int) : void
+    # <<override>> BoardFactory(boardSize:int) : List<Board>
+    # <<override>> CreatePieceSet(boardSize:int) : List<Piece>
+    + <<override>> CheckWin(move:Move) : Report
+    - CountDirection(board:Board, from:Point, rowStep:int, colStep:int, pieceValue:int) : int
+    + <<override>> AvailablePieces(player:Player) : List<Piece>
+}
+Rules <|-- GomokuRules
+GomokuRules --> "GameType" GameType
+class NumericalTicTacToe {
+    - customBoard : bool = true
+    - goal : int = 0
+    + <<override>> GameName : string <<get>>
+    + <<override>> GameDescription : string <<get>>
+    + <<override>> CustomBoard : bool <<get>>
+    + <<override>> SetupRules(boardSize:int) : void
+    # <<override>> BoardFactory(boardSize:int) : List<Board>
+    # <<override>> CreatePieceSet(boardSize:int) : List<Piece>
+    + <<override>> CheckWin(move:Move) : Report
+    + WinSum(pieceArray:Piece[]) : bool
+    + <<override>> AvailablePieces(player:Player) : List<Piece>
+}
+Rules <|-- NumericalTicTacToe
+IRules <|-- NumericalTicTacToe
+NumericalTicTacToe --> "GameType" GameType
+class GameSetup {
+    + GameSetup()
+    + SetupGame() : void
+    + LoadSave(save:SaveFile) : void
+    + LoadSelection() : bool
+    + RulesFactory() : Rules
+    - GetGames() : string
+    - RulesSelection() : Rules
+    - GetCustomBoardSize() : int
+    + ModeSelection() : GameMode
+    - PlayersFactory(mode:GameMode) : Player[]
+    - PlayerSetup(mode:GameMode) : Player[]
+    + RestorePlayers(save:SaveFile) : Player[]
+}
+enum GameType {
+    NumericalTicTacToe= 1,
+    Gomoku,
+    Notakto,
+}
+enum GameMode {
+    HumanVHuman= 1,
+    HumanVComputer,
+}
+class "Dictionary`2"<T1,T2> {
+}
+GameSetup --> "gameLoop" GameLoop
+GameSetup o-> "games<GameType,Rules>" "Dictionary`2"
+class ConsoleUI {
+    + ConsoleUI()
+    + PromptInteger(prompt:string) : int
+    - PlayerInput() : string
+    + DisplayMessage(message:string) : void
+    + PromptAnyKey() : void
+    + PromptString(prompt:string) : string
+}
+ConsoleUI --> "instance" ConsoleUI
+ConsoleUI --> "Instance" ConsoleUI
+interface SystemCommand {
+    Execute() : bool
+}
+class HelpCommand {
+    + Execute() : bool
+}
+class SaveCommand {
+    + SaveCommand(rules:Rules, gameLoop:GameLoop)
+    + Execute() : bool
+}
+class LoadCommand {
+    + LoadCommand(gameSetup:GameSetup, rules:Rules)
+    + Execute() : bool
+}
+class UndoCommand {
+    + Execute() : bool
+}
+class RedoCommand {
+    + Execute() : bool
+}
+SystemCommand <|-- HelpCommand
+SystemCommand <|-- SaveCommand
+SaveCommand --> "rules" Rules
+SaveCommand --> "gameLoop" GameLoop
+SystemCommand <|-- LoadCommand
+LoadCommand --> "gameSetup" GameSetup
+LoadCommand --> "rules" Rules
+SystemCommand <|-- UndoCommand
+SystemCommand <|-- RedoCommand
+@enduml

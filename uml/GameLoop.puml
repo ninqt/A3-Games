@@ -1,0 +1,26 @@
+@startuml
+class GameLoop {
+    - turnIndex : int = 0
+    + TurnIndex : int <<get>> <<set>>
+    - gameComplete : bool = false
+    + GameLoop(selectedRules:Rules, players:Player[], mode:GameMode, setup:GameSetup)
+    + RunGame() : void
+    - PlayerTurn(currentPlayer:Player) : Report
+    + PerformTurn(move:Move) : void
+    - CheckGameEnd(turnReport:Report) : bool
+    - CommandPhase(currentPlayer:Player) : bool
+    - CheckCommands(input:String) : bool
+    - HelpCommand() : void
+    + StopRunning() : void
+}
+class "List`1"<T> {
+}
+class "Dictionary`2"<T1,T2> {
+}
+GameLoop o-> "boardList<Board>" "List`1"
+GameLoop o-> "renderEngine" RenderEngine
+GameLoop o-> "historyEngine" HistoryEngine
+GameLoop o-> "rules" Rules
+GameLoop --> "Mode" GameMode
+GameLoop --> "CommandStrategies<string,SystemCommand>" "Dictionary`2"
+@enduml

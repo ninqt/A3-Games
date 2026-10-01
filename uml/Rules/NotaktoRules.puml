@@ -1,0 +1,18 @@
+@startuml
+class NotaktoRules {
+    - <<const>> BoardSize : int = 3
+    - <<const>> BoardCount : int = 3
+    + NotaktoRules()
+    + <<override>> GameName : string <<get>>
+    + <<override>> GameDescription : string <<get>>
+    + <<override>> CustomBoard : bool <<get>>
+    + <<override>> SetupRules(boardSize:int) : void
+    # <<override>> BoardFactory(boardSize:int) : List<Board>
+    # <<override>> CreatePieceSet(boardSize:int) : List<Piece>
+    + <<override>> CheckWin(move:Move) : Report
+    - LineFilled(line:Piece[]) : bool
+    + <<override>> AvailablePieces(player:Player) : List<Piece>
+}
+Rules <|-- NotaktoRules
+NotaktoRules --> "GameType" GameType
+@enduml

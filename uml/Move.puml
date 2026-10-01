@@ -1,0 +1,13 @@
+@startuml
+class Move {
+    - playerNumber : int
+    - boardNumber : int
+    + PlayerNumber : int <<get>>
+    + BoardNumber : int <<get>>
+    + Move(piece:Piece, playerNumber:int, boardNumber:int, position:Point)
+}
+Move --> "piece" Piece
+Move --> "position" Point
+Move --> "Piece" Piece
+Move --> "Position" Point
+@enduml

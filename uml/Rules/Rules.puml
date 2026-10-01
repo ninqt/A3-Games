@@ -1,0 +1,24 @@
+@startuml
+interface IRules {
+    SetupRules(boardSize:int) : void
+    CheckWin(move:Move) : Report
+    AvailablePieces(player:Player) : List<Piece>
+}
+abstract class Rules {
+    + {abstract} CustomBoard : bool <<get>>
+    - gameName : string = ""
+    + {abstract} GameName : string <<get>>
+    + {abstract} GameDescription : string <<get>>
+    # {abstract} BoardFactory(boardSize:int) : List<Board>
+    # {abstract} CreatePieceSet(boardSize:int) : List<Piece>
+    + {abstract} CheckWin(move:Move) : Report
+    + {abstract} SetupRules(boardSize:int) : void
+    + {abstract} AvailablePieces(player:Player) : List<Piece>
+}
+class "List`1"<T> {
+}
+IRules <|-- Rules
+Rules o-> "boardList<Board>" "List`1"
+Rules --> "GameType" GameType
+Rules --> "BoardList<Board>" "List`1"
+@enduml

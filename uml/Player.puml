@@ -1,0 +1,22 @@
+@startuml
+abstract class Player {
+    + {abstract} IsHuman : bool <<get>>
+    + PlayerNumber : int <<get>> <<set>>
+    + {abstract} PlayerTurn(rules:Rules) : Move
+}
+class HumanPlayer {
+    + <<override>> IsHuman : bool <<get>>
+    + <<override>> PlayerTurn(rules:Rules) : Move
+    - GetPieceChoice(availablePieces:List<Piece>) : Piece
+    - GetSpaceChoice(board:Board) : Point
+    - GetBoardChoice(rules:Rules) : int
+}
+class AIPlayer {
+    + <<override>> IsHuman : bool <<get>>
+    + <<override>> PlayerTurn(rules:Rules) : Move
+    - FindWin(availablePieces:List<Piece>, avaliableSpaces:List<Point>, board:Board, rules:Rules, boardNumber:int) : Move
+    - RandomMove(rules:Rules) : Move
+}
+Player <|-- HumanPlayer
+Player <|-- AIPlayer
+@enduml

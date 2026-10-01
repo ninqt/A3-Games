@@ -2,9 +2,9 @@ using System.Drawing;
 
 public class ConsoleUI {
 
-    private static ConsoleUI instance;
+    private static ConsoleUI? instance;
 
-    public static ConsoleUI Instance {get{return instance;}}
+    public static ConsoleUI Instance {get{return instance!;}}
 
     public ConsoleUI(){
         instance = this; //There can only ever be one ConsoleUI so it can be a singleton.
@@ -29,7 +29,7 @@ public class ConsoleUI {
             string input = "";
             while (incomplete){
                 Console.Write("Input:");
-                input = Console.ReadLine();
+                input = Console.ReadLine()!;
                 incomplete = false;
             }
             return input!;}

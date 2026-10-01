@@ -1,0 +1,31 @@
+@startuml
+interface SystemCommand {
+    Execute() : bool
+}
+class HelpCommand {
+    + Execute() : bool
+}
+class SaveCommand {
+    + SaveCommand(rules:Rules, gameLoop:GameLoop)
+    + Execute() : bool
+}
+class LoadCommand {
+    + LoadCommand(gameSetup:GameSetup, rules:Rules)
+    + Execute() : bool
+}
+class UndoCommand {
+    + Execute() : bool
+}
+class RedoCommand {
+    + Execute() : bool
+}
+SystemCommand <|-- HelpCommand
+SystemCommand <|-- SaveCommand
+SaveCommand --> "rules" Rules
+SaveCommand --> "gameLoop" GameLoop
+SystemCommand <|-- LoadCommand
+LoadCommand --> "gameSetup" GameSetup
+LoadCommand --> "rules" Rules
+SystemCommand <|-- UndoCommand
+SystemCommand <|-- RedoCommand
+@enduml

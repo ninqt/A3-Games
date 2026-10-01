@@ -1,0 +1,15 @@
+@startuml
+enum Result {
+    nothing,
+    draw,
+    loss,
+    win,
+}
+class Report {
+    - message : string
+    + Message : string <<get>>
+    + Report(result:Result, message:String)
+}
+Report --> "result" Result
+Report --> "Result" Result
+@enduml

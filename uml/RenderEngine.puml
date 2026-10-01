@@ -1,0 +1,11 @@
+@startuml
+class RenderEngine {
+    - blankSpace : string = ""
+    + RenderEngine(boardList:List<Board>)
+    + DrawAllBoards() : void
+    + DrawBoard(board:Board) : void
+}
+class "List`1"<T> {
+}
+RenderEngine --> "boardList<Board>" "List`1"
+@enduml

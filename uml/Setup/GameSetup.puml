@@ -1,0 +1,29 @@
+@startuml
+class GameSetup {
+    + GameSetup()
+    + SetupGame() : void
+    + LoadSave(save:SaveFile) : void
+    + LoadSelection() : bool
+    + RulesFactory() : Rules
+    - GetGames() : string
+    - RulesSelection() : Rules
+    - GetCustomBoardSize() : int
+    + ModeSelection() : GameMode
+    - PlayersFactory(mode:GameMode) : Player[]
+    - PlayerSetup(mode:GameMode) : Player[]
+    + RestorePlayers(save:SaveFile) : Player[]
+}
+enum GameType {
+    NumericalTicTacToe= 1,
+    Gomoku,
+    Notakto,
+}
+enum GameMode {
+    HumanVHuman= 1,
+    HumanVComputer,
+}
+class "Dictionary`2"<T1,T2> {
+}
+GameSetup --> "gameLoop" GameLoop
+GameSetup o-> "games<GameType,Rules>" "Dictionary`2"
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+class ConsoleUI {
+    + ConsoleUI()
+    + PromptInteger(prompt:string) : int
+    - PlayerInput() : string
+    + DisplayMessage(message:string) : void
+    + PromptAnyKey() : void
+    + PromptString(prompt:string) : string
+}
+ConsoleUI --> "instance" ConsoleUI
+ConsoleUI --> "Instance" ConsoleUI
+@enduml

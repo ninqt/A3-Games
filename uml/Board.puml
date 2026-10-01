@@ -1,0 +1,25 @@
+@startuml
+class Board {
+    - boardSize : int
+    - maxSpace : int
+    - isLive : bool = true
+    + BoardSize : int <<get>>
+    + MaxSpace : int <<get>>
+    + IsLive : bool <<get>> <<set>>
+    + Board(n:int, pieces:List<Piece>)
+    + SetPiece(number:int, space:Point) : void
+    + RemovePiece(position:Point) : void
+    - {static} LocalToBoard(space:Point) : Point
+    + CheckSpace(space:Point) : void
+    + GetRow(space:Point) : Piece[]
+    + GetColumn(space:Point) : Piece[]
+    + GetNWDiagonal() : Piece[]
+    + GetNEDiagonal() : Piece[]
+    + GetAvaliableSpaces() : List<Point>
+    + GetPiece(space:Point) : Piece
+}
+class "List`1"<T> {
+}
+Board --> "pieces<Piece>" "List`1"
+Board --> "Pieces<Piece>" "List`1"
+@enduml

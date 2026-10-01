@@ -1,0 +1,18 @@
+@startuml
+class GomokuRules {
+    - <<const>> BoardSize : int = 15
+    - <<const>> WinLength : int = 5
+    + GomokuRules()
+    + <<override>> GameName : string <<get>>
+    + <<override>> GameDescription : string <<get>>
+    + <<override>> CustomBoard : bool <<get>>
+    + <<override>> SetupRules(boardSize:int) : void
+    # <<override>> BoardFactory(boardSize:int) : List<Board>
+    # <<override>> CreatePieceSet(boardSize:int) : List<Piece>
+    + <<override>> CheckWin(move:Move) : Report
+    - CountDirection(board:Board, from:Point, rowStep:int, colStep:int, pieceValue:int) : int
+    + <<override>> AvailablePieces(player:Player) : List<Piece>
+}
+Rules <|-- GomokuRules
+GomokuRules --> "GameType" GameType
+@enduml

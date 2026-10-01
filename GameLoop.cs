@@ -26,7 +26,8 @@ public class GameLoop{
         ["SAVE"] = new SaveCommand(rules, this),
         ["LOAD"] = new LoadCommand(setup,rules),
         ["UNDO"] = new UndoCommand(),
-        ["REDO"] = new RedoCommand()
+        ["REDO"] = new RedoCommand(),
+        ["HELP"] = new HelpCommand(rules.GameName,rules.GameDescription)
         };
         }
     
@@ -131,21 +132,8 @@ public class GameLoop{
             bool turnOver = command.Execute(); //Command is executed and game checks if turn is over due to undo/redo
             return turnOver;
             }
-        if(input == "HELP"){
-            HelpCommand();
-        }
         return false;}
-    private void HelpCommand(){ //TODO: Make this an actual command
-        string gameHelp = "---Game Description---";
-        gameHelp = gameHelp + "\n" + $"You are playing {rules.GameName}" + "\n" + rules.GameDescription;
-        ConsoleUI.Instance.DisplayMessage(gameHelp);
-        string commandsHelp = "---Commands---";
-        string saveHelp = "SAVE - Saves the current state of play and exits the program (UNDER CONSTRUCTION)";
-        string undoHelp = "UNDO - Undo the last move taken by a player";
-        string redoHelp = "REDO - Redo the last move that was undone. This can be done for as many undos taken";
-        commandsHelp = commandsHelp + "\n" + saveHelp + "\n" + undoHelp + "\n" + redoHelp;
-        ConsoleUI.Instance.DisplayMessage(commandsHelp);
-    }
+
 
     public void StopRunning(){
         gameComplete = false;

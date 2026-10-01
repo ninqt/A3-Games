@@ -25,6 +25,7 @@ public class GameSetup{ //Game setup/controller script
             SaveFile save = SaveEngine.Instance.GetSaveFile(selectedRules);
             LoadSave(save);
             return;}
+        FinaliseRulesSetup(selectedRules);
         GameMode mode = ModeSelection();
         Player[] players = PlayersFactory(mode);
         HistoryEngine historyEngine = new HistoryEngine(selectedRules);
@@ -59,11 +60,14 @@ public class GameSetup{ //Game setup/controller script
 
     public Rules RulesFactory(){ //Obtains inputs from player to select and create rules
         Rules selectedRules = RulesSelection();
-        int boardSize = 0;
-        if(selectedRules.CustomBoard == true){
-            boardSize = GetCustomBoardSize();}
-        selectedRules.SetupRules(boardSize);
         return selectedRules;
+    }
+
+    private void FinaliseRulesSetup(Rules rules){
+        int boardSize = 0;
+        if(rules.CustomBoard == true){
+            boardSize = GetCustomBoardSize();}
+        rules.SetupRules(boardSize); 
     }
 
     private string GetGames(){

@@ -1,0 +1,18 @@
+@startuml
+class PointZeroException {
+    + PointZeroException()
+}
+class SpaceTakenException {
+    + SpaceTakenException()
+}
+class NoUndoAvailable {
+    + NoUndoAvailable()
+}
+class NoRedoAvailable {
+    + NoRedoAvailable()
+}
+Exception <|-- PointZeroException
+Exception <|-- SpaceTakenException
+Exception <|-- NoUndoAvailable
+Exception <|-- NoRedoAvailable
+@enduml

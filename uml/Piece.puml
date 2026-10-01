@@ -1,0 +1,9 @@
+@startuml
+class Piece {
+    - value : int
+    - renderValue : string
+    + Value : int <<get>>
+    + RenderValue : string <<get>>
+    + Piece(value:int, renderValue:string)
+}
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+class NumericalTicTacToe {
+    - customBoard : bool = true
+    - goal : int = 0
+    + <<override>> GameName : string <<get>>
+    + <<override>> GameDescription : string <<get>>
+    + <<override>> CustomBoard : bool <<get>>
+    + <<override>> SetupRules(boardSize:int) : void
+    # <<override>> BoardFactory(boardSize:int) : List<Board>
+    # <<override>> CreatePieceSet(boardSize:int) : List<Piece>
+    + <<override>> CheckWin(move:Move) : Report
+    + WinSum(pieceArray:Piece[]) : bool
+    + <<override>> AvailablePieces(player:Player) : List<Piece>
+}
+Rules <|-- NumericalTicTacToe
+IRules <|-- NumericalTicTacToe
+NumericalTicTacToe --> "GameType" GameType
+@enduml

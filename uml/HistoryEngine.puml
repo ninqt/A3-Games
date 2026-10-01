@@ -1,0 +1,16 @@
+@startuml
+class HistoryEngine {
+    - {static} instance : HistoryEngine?
+    + HistoryEngine(rules:Rules)
+    + RecordMove(move:Move) : void
+    + Undo() : bool
+    + Redo() : bool
+}
+class "List`1"<T> {
+}
+HistoryEngine o-> "moveHistory<Move>" "List`1"
+HistoryEngine o-> "redoHistory<Move>" "List`1"
+HistoryEngine --> "rules" Rules
+HistoryEngine --> "Instance" HistoryEngine
+HistoryEngine --> "MoveHistory<Move>" "List`1"
+@enduml

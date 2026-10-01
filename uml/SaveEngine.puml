@@ -1,0 +1,27 @@
+@startuml
+class SaveEngine {
+    <<const>> - FILENAME : string
+    <<const>> - VERSION : string = "v12"
+    + SaveEngine()
+    + SaveGame(gameLoop:GameLoop, rules:Rules) : bool
+    + CheckSaveFile(rules:Rules) : bool
+    + GetSaveFile(rules:Rules) : SaveFile
+}
+class SaveFile {
+    + TurnIndex : int <<get>> <<set>>
+    + BoardSize : int <<get>> <<set>>
+    + SaveFile(moveHistory:List<Move>, gameType:GameType, mode:GameMode, turnIndex:int, boardSize:int, players:PlayerSaveData[])
+}
+class PlayerSaveData {
+    + IsHuman : bool <<get>> <<set>>
+    + PlayerNumber : int <<get>> <<set>>
+    + PlayerSaveData(isHuman:bool, playerNumber:int)
+}
+class "List`1"<T> {
+}
+SaveEngine --> "instance" SaveEngine
+SaveEngine --> "Instance" SaveEngine
+SaveFile --> "MoveHistory<Move>" "List`1"
+SaveFile --> "GameType" GameType
+SaveFile --> "Mode" GameMode
+@enduml
