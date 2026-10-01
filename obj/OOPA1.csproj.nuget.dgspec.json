@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nin\\OOPA2\\My Version\\OOPA1.csproj": {}
+    "C:\\Users\\sean\\oopa3\\A3-Games\\OOPA1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nin\\OOPA2\\My Version\\OOPA1.csproj": {
+    "C:\\Users\\sean\\oopa3\\A3-Games\\OOPA1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nin\\OOPA2\\My Version\\OOPA1.csproj",
+        "projectUniqueName": "C:\\Users\\sean\\oopa3\\A3-Games\\OOPA1.csproj",
         "projectName": "OOPA1",
-        "projectPath": "C:\\Users\\nin\\OOPA2\\My Version\\OOPA1.csproj",
-        "packagesPath": "C:\\Users\\nin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nin\\OOPA2\\My Version\\obj\\",
+        "projectPath": "C:\\Users\\sean\\oopa3\\A3-Games\\OOPA1.csproj",
+        "packagesPath": "C:\\Users\\sean\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\sean\\oopa3\\A3-Games\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\nin\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\sean\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
@@ -39,7 +39,7 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
@@ -61,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

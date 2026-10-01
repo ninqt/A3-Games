@@ -5,7 +5,22 @@ public interface SystemCommand {
 
 //TODO: Implement commands
 public class HelpCommand : SystemCommand {
+    string gameName;
+    string gameDescription;
+    public HelpCommand(string gameName,string gameDescription){
+        this.gameName = gameName;
+        this.gameDescription = gameDescription;
+    }
     public bool Execute(){
+        string gameHelp = "---Game Description---";
+        gameHelp = gameHelp + "\n" + $"You are playing {gameName}" + "\n" + gameDescription;
+        ConsoleUI.Instance.DisplayMessage(gameHelp);
+        string commandsHelp = "---Commands---";
+        string saveHelp = "SAVE - Saves the current state of play and exits the program (UNDER CONSTRUCTION)";
+        string undoHelp = "UNDO - Undo the last move taken by a player";
+        string redoHelp = "REDO - Redo the last move that was undone. This can be done for as many undos taken";
+        commandsHelp = commandsHelp + "\n" + saveHelp + "\n" + undoHelp + "\n" + redoHelp;
+        ConsoleUI.Instance.DisplayMessage(commandsHelp);
         return false;
     }
 }

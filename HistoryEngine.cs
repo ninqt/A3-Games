@@ -8,7 +8,7 @@ public class HistoryEngine {
 
     private static HistoryEngine? instance; //Singleton pointer.
 
-    public  static HistoryEngine Instance {get{return instance;}}
+    public  static HistoryEngine Instance {get{return instance!;}}
     public List<Move> MoveHistory {get{return moveHistory;} set{moveHistory = value;}}
 
     public HistoryEngine(Rules rules){
