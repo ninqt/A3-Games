@@ -6,7 +6,7 @@ public class RenderEngine { //Draws the board to the screen so that the user can
     public RenderEngine(List<Board> boardList){
         this.boardList = boardList;
         for( int x = 0; x < System.Convert.ToString(boardList[0].Pieces[^1].Value).Length; x++){
-            blankSpace = blankSpace + ".";}}
+            blankSpace = blankSpace + ".";}} //Padding is calculated
 
     public void DrawAllBoards(){
         Console.Clear(); //TODO: This should be somewhere else
@@ -24,7 +24,7 @@ public class RenderEngine { //Draws the board to the screen so that the user can
                 if(piece == null){
                     spaceRender = blankSpace;} //If there is no piece, we catch and insert a default space
                 else{
-                    spaceRender = piece.RenderValue; //($"D{blankSpace.Length}");
+                    spaceRender = piece.RenderValue;
                 }
                 line = line + ($"  {spaceRender}  ");}
             Console.WriteLine(line);}}

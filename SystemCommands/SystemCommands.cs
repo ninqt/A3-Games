@@ -1,5 +1,5 @@
 
-public interface SystemCommand {
+public interface SystemCommand { //Base interface for system commands
     bool Execute();
 }
 
@@ -11,7 +11,7 @@ public class HelpCommand : SystemCommand {
         this.gameName = gameName;
         this.gameDescription = gameDescription;
     }
-    public bool Execute(){
+    public bool Execute(){ //Method for help command to list all help menu items to player
         string gameHelp = "---Game Description---";
         gameHelp = gameHelp + "\n" + $"You are playing {gameName}" + "\n" + gameDescription;
         ConsoleUI.Instance.DisplayMessage(gameHelp);
@@ -32,7 +32,7 @@ public class SaveCommand : SystemCommand {
         this.rules = rules;
         this.gameLoop = gameLoop;
     }
-    public bool Execute() {
+    public bool Execute() { //Method that attempts to save current game state to file
         bool savesuccess = SaveEngine.Instance.SaveGame(gameLoop,rules);
         if(savesuccess){
             ConsoleUI.Instance.DisplayMessage("Saving game sucessful. Feel free to quit or keep playing.");
@@ -51,7 +51,7 @@ public class LoadCommand : SystemCommand{
         this.gameSetup = gameSetup;
         this.rules = rules;
     }
-    public bool Execute(){
+    public bool Execute(){ //Method that checks for a save file and if found, loads it to be played
         bool checkFile = SaveEngine.Instance.CheckSaveFile(rules);
         if(checkFile){
             ConsoleUI.Instance.DisplayMessage("Save file found. Press any key to load.");
@@ -67,34 +67,30 @@ public class LoadCommand : SystemCommand{
 }
 
 public class UndoCommand : SystemCommand{
-    public bool Execute(){
+    public bool Execute(){ //Method that attempts to undo, and displays reason why to the player if it cannot.
         bool undoSuccess = false;
-        try
-        {
+        try{
             undoSuccess = HistoryEngine.Instance.Undo();
             if(undoSuccess == true){
                 ConsoleUI.Instance.DisplayMessage("Undo sucessful. Press any key to continue.");
                 Console.ReadKey();
                 return true;}
         }
-        catch(NoUndoAvailable ex)
-        {
+        catch(NoUndoAvailable ex){
             ConsoleUI.Instance.DisplayMessage(ex.Message);}
     return false;}}
 
 public class RedoCommand : SystemCommand{
-    public bool Execute(){
+    public bool Execute(){ //Method that attempts to redo, and displays reason why to the player if it cannot.
         bool redoSuccess = false;
-        try
-        {
+        try{
             redoSuccess = HistoryEngine.Instance.Redo();
             if(redoSuccess == true){
                 ConsoleUI.Instance.DisplayMessage("Redo sucessful. Press any key to continue.");
                 Console.ReadKey();
                 return true;}
         }
-        catch(NoUndoAvailable ex)
-        {
+        catch(NoUndoAvailable ex){
             ConsoleUI.Instance.DisplayMessage(ex.Message);}
     return false;
     }

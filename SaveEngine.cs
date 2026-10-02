@@ -3,15 +3,15 @@
 using System.Text.Json;
 
 public class SaveEngine{
-    private static SaveEngine instance;
+    private static SaveEngine? instance;
     const string FILENAME = VERSION + "SaveGame.json";
     const string VERSION = "v12";
-    public static SaveEngine Instance {get{return instance;}}
+    public static SaveEngine Instance {get{return instance!;}}
 
     public SaveEngine(){
         instance = this;
     }
-    public bool SaveGame(GameLoop gameLoop,Rules rules){
+    public bool SaveGame(GameLoop gameLoop,Rules rules){ //Method for saving a game to given game's filepath
         List<Move> moveHistory = HistoryEngine.Instance.MoveHistory.ToList();
         GameMode mode = gameLoop.Mode;
         PlayerSaveData[] players = new PlayerSaveData[gameLoop.Players.Length];
@@ -26,12 +26,10 @@ public class SaveEngine{
         SaveFile saveFile = new SaveFile(moveHistory,gameType,mode,turnIndex,boardSize,players);
         string jsonString = JsonSerializer.Serialize(saveFile);
         string saveFileName = rules.GameName + FILENAME;
-        try
-        {
+        try{
             File.WriteAllText(saveFileName,jsonString);
         }
-        catch
-        {
+        catch{
             return false;
         }
         return true;
@@ -40,7 +38,7 @@ public class SaveEngine{
     public bool CheckSaveFile(Rules rules){ //Other objects can check wether a current save exists.
         return File.Exists(rules.GameName + FILENAME);
     }
-    public SaveFile GetSaveFile(Rules rules){
+    public SaveFile GetSaveFile(Rules rules){ //Method for reading and getting save file from a game's filepath
         SaveFile saveFile;
         try{
             string saveJson = File.ReadAllText(rules.GameName + FILENAME);

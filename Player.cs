@@ -12,7 +12,7 @@ public abstract class Player{
 public class HumanPlayer : Player {
     public override bool IsHuman => true;
 
-    public override Move PlayerTurn(Rules rules){ //We should get player input and then determine course of action.
+    public override Move PlayerTurn(Rules rules){ //We should get player input and then determine course of action
         int selectedBoardNumber = GetBoardChoice(rules);
         List<Piece> availablePieces = rules.AvailablePieces(this);
         Piece selectedPiece = GetPieceChoice(availablePieces);
@@ -20,9 +20,9 @@ public class HumanPlayer : Player {
         Point selectedSpace = GetSpaceChoice(board);
         Move confirmedMove = new Move(selectedPiece,PlayerNumber,selectedBoardNumber,selectedSpace);
         return confirmedMove;}
-    private Piece GetPieceChoice(List<Piece> availablePieces){
+    private Piece GetPieceChoice(List<Piece> availablePieces){ //Method that prompts player to select piece
         if(availablePieces.TrueForAll(piece => piece.Value == availablePieces[0].Value) == true){
-            return availablePieces[0];} //TODO: Need to workaround there only being one piece in pool in NTTT
+            return availablePieces[0];} //If there is no selection to be made, piece is auto-selected
         string messageString = "Avaliable Pieces:";
         for(int x = 0; x < availablePieces.Count; x++){
             messageString = messageString + " " + availablePieces[x].Value;}
@@ -37,7 +37,7 @@ public class HumanPlayer : Player {
                 continue;}}
         return selectedPiece;}
 
-    private Point GetSpaceChoice(Board board){
+    private Point GetSpaceChoice(Board board){ //Method that prompts player to select a space to use
         bool selectionIncomplete = true;
         Point selectedSpace = new Point(0,0);
         while(selectionIncomplete){
@@ -46,17 +46,16 @@ public class HumanPlayer : Player {
                 selectedSpace.X = row;
                 int column = ConsoleUI.Instance.PromptInteger("Enter the column to use. e.g. 1 for column 1 (From the left).");
                 selectedSpace.Y = column;
-                board.CheckSpace(selectedSpace);
+                board.CheckSpace(selectedSpace); //Space is checked as valid and untaken
                 break;}
             catch{
                 ConsoleUI.Instance.DisplayMessage("Invalid space selected. Please try again.");
                 continue;}}
         return selectedSpace;}
     
-    private int GetBoardChoice(Rules rules){
+    private int GetBoardChoice(Rules rules){ //Method that gets a choice of board to use from player
         if(rules.BoardList.Count == 1){
-            return 0; //If there is only one board, no choice needs to be made.
-        }
+            return 0;} //If there is only one board, no choice needs to be made.
         bool selectionIncomplete = true;
         Board selectedBoard = null!;
         int boardNumber = 0;
@@ -79,7 +78,7 @@ public class HumanPlayer : Player {
 public class AIPlayer : Player {
     public override bool IsHuman => false;
 
-    public override Move PlayerTurn(Rules rules){
+    public override Move PlayerTurn(Rules rules){ //Method that runs through computer's turn
         for(int x = 0; x < rules.BoardList.Count ; x++)
         {
             Board board = rules.BoardList[x];
@@ -93,7 +92,7 @@ public class AIPlayer : Player {
         return randomMove;
         }
     private Move FindWin(List<Piece> availablePieces,List<Point> avaliableSpaces,Board board,Rules rules, int boardNumber){
-        foreach(Point space in avaliableSpaces){
+        foreach(Point space in avaliableSpaces){ //Scanning through all possible moves to find a winning move
             foreach(Piece piece in availablePieces){
                 board.SetPiece(piece.Value,space); //Placing piece on board
                 Move move = new Move(piece,this.PlayerNumber,boardNumber,space);
@@ -103,7 +102,7 @@ public class AIPlayer : Player {
                     return move;}}} //If no wins, we remove the piece
         return null!;} //If all spaces fail to find win, we can return and place a random piece
 
-    private Move RandomMove(Rules rules){
+    private Move RandomMove(Rules rules){ //Method for creating a valid random move for computer to take
         Random rng = new Random();
         bool boardSelected = false;
         List<Board> newBoardList = new List<Board>(rules.BoardList);
