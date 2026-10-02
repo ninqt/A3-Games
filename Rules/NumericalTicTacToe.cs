@@ -27,9 +27,9 @@ public class NumericalTicTacToe : Rules, IRules { //TODO: Should be called Numer
 
     protected override List<Piece>CreatePieceSet(int boardSize){
         List<Piece> newPieceSet = new List<Piece>();
-        int maxSpace = boardSize * boardSize; // Maxspace is calculated
+        int maxSpace = boardSize * boardSize; // Max space of board is calculated
         string renderHelper = System.Convert.ToString(maxSpace);
-        for(int x = 1; x <= maxSpace; x++){ //Change < into <= to include maxSpace in the piece set -- Terry
+        for(int x = 1; x <= maxSpace; x++){ //Pieces are created 1 through maxSpace
             int newPieceValue = x;
             string newPieceRender = newPieceValue.ToString($"D{renderHelper.Length}");
             newPieceSet.Add(new Piece(newPieceValue,newPieceRender));}

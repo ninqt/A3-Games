@@ -1,12 +1,7 @@
 
-public enum Result{
-    nothing,
-    draw,
-    loss,
-    win
-}
 
-public class Report{
+
+public class Report{ //Object that contains wether a game has been won, lost, drawn or not + a message about why
     private Result result;
     private string message;
 

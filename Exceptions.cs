@@ -10,12 +10,12 @@ public class SpaceTakenException : Exception { // For throwing if player enters 
     : base("Space is already taken by a piece. Please try again.") {}
 }
 
-public class NoUndoAvailable : Exception{
+public class NoUndoAvailable : Exception{ //For throwing if there are no undos in MoveHistory
     public NoUndoAvailable()
     : base("There are no undos avaliable to perform. Please try another command.") {}
 }
 
-public class NoRedoAvailable : Exception{
+public class NoRedoAvailable : Exception{ //For throwing if there are no redos in RedoHistory
     public NoRedoAvailable()
     : base("There are no redos avaliable to perform. Please try another command.") {}
 }

@@ -51,7 +51,7 @@ public class ConsoleUI {
                 input = PlayerInput();}
             catch{
                 Console.WriteLine("Invalid input detected. Please follow the instructions and try again.");
-                continue;} //If the player enters non-integer input we re-prompt them.
+                continue;} //If the player enters non-string input we re-prompt them.
             incomplete = false;}
         return input;}
 }

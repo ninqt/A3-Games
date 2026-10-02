@@ -21,8 +21,7 @@ public class GameLoop{
         this.Mode = mode;
         renderEngine = new RenderEngine(rules.BoardList);
         historyEngine = HistoryEngine.Instance;
-        CommandStrategies = new()
-        {
+        CommandStrategies = new(){ //Strategy of avaliable system commands
         ["SAVE"] = new SaveCommand(rules, this),
         ["LOAD"] = new LoadCommand(setup,rules),
         ["UNDO"] = new UndoCommand(),
@@ -32,49 +31,47 @@ public class GameLoop{
         }
     
 
-    public void RunGame(){
+    public void RunGame(){ //Method that loops and runs game until completed
         bool gameComplete = false;
         while(!gameComplete){
             for(int x = turnIndex ; x < players.Length; x++){
                 Player currentPlayer = players[x];
                 bool turnOver = CommandPhase(currentPlayer); //Command phase allows players to enter system commands
-                if(turnOver == true){
+                if(turnOver == true){ //If a command causes turn to end, we end the current turn
                     if(gameComplete){
                         break;}
                     continue;}
-                Report turnReport = PlayerTurn(currentPlayer);
-                gameComplete = CheckGameEnd(turnReport);
+                Report turnReport = PlayerTurn(currentPlayer); //After command phase player takes turn
+                gameComplete = CheckGameEnd(turnReport); //After a turn, let's check if the game has been concluded
                 turnIndex = x + 1;
-                if(gameComplete == true){
+                if(gameComplete == true){ //If game has concluded, program exits
                     ConsoleUI.Instance.DisplayMessage("The program will now exit. Press any key");
                     gameComplete = true;
                     Console.ReadKey();
-                    break;
-                    //TODO: Need more of a hard exit. ALSO. Any save file here should be erased(?)
-                }
+                    break;}
             }
-            turnIndex = 0;
+            turnIndex = 0; //After a turn turn index is set to 1, primarily for when loading from an in progress game.
         }
     }
 
     private Report PlayerTurn(Player currentPlayer){
-        Move playerMove = currentPlayer.PlayerTurn(rules);
-        PerformTurn(playerMove);
-        Report checkForResult = rules.CheckWin(playerMove);
+        Move playerMove = currentPlayer.PlayerTurn(rules); //Player takes their turn and returns the move taken
+        PerformTurn(playerMove); //GameLoop performs the move for the player
+        Report checkForResult = rules.CheckWin(playerMove); //Checking if player has ended the game and generating a report
         historyEngine.RecordMove(playerMove); //History engine logs move taken.
         Console.Clear();
         renderEngine.DrawAllBoards();
         ConsoleUI.Instance.DisplayMessage($"Player {playerMove.PlayerNumber} placed {playerMove.Piece.Value} on {playerMove.Position}");
-        ConsoleUI.Instance.PromptAnyKey();
+        ConsoleUI.Instance.PromptAnyKey(); // Players turn is displayed to console
         return checkForResult;
         }
 
-    public void PerformTurn(Move move){
+    public void PerformTurn(Move move){ //Method that performs given move in argument
         Board selectedBoard = rules.BoardList[move.BoardNumber];
         selectedBoard.SetPiece(move.Piece.Value,move.Position);
     }
 
-    private bool CheckGameEnd(Report turnReport){
+    private bool CheckGameEnd(Report turnReport){ //Method that checks report to see if a game has ended and displays why
         switch(turnReport.Result){
             case Result.nothing:
             return false;
@@ -91,7 +88,7 @@ public class GameLoop{
         return false; //Just incase
     }
 
-    private bool CommandPhase(Player currentPlayer){
+    private bool CommandPhase(Player currentPlayer){ //Method that allows player to enter system commands before a turn
         Console.Clear();
         renderEngine.DrawAllBoards();
         switch (currentPlayer.IsHuman){
@@ -103,21 +100,18 @@ public class GameLoop{
             break;}
         bool incomplete = true;
         string input = "";
-        while (incomplete)
-        {
+        while (incomplete){
             ConsoleUI.Instance.DisplayMessage("Press ENTER KEY to begin turn or HELP to see a list of useable commands and game instructions.");
-            try
-            {
-                input = ConsoleUI.Instance.PromptString(); //TODO: Should go through consoleUI   
+            try{
+                input = ConsoleUI.Instance.PromptString();   
                 bool turnOver = CheckCommands(input);
-                if(input == ""){
+                if(input == ""){ //If player entered nothing and just pressed ENTER, command phase is ended.
                     return false;}
-                if(turnOver == false){
+                if(turnOver == false){ //If command did not end turn (Undo/Redo/Load), game continues
                     continue;}
                 else{
                     return true;}}
-            catch
-            {
+            catch{
                 continue;
             }
         }
@@ -135,8 +129,7 @@ public class GameLoop{
         return false;}
 
 
-    public void StopRunning(){
-        gameComplete = false;
-    }
+    public void StopRunning(){ //Method that stops the game loop from running
+        gameComplete = true;}
 
 }

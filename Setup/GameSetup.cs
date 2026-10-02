@@ -3,7 +3,7 @@ using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
 public class GameSetup{ //Game setup/controller script
-    private GameLoop gameLoop;
+    private GameLoop? gameLoop;
 
     private Dictionary<GameType,Rules> games = new(){
         [GameType.NumericalTicTacToe] = new NumericalTicTacToe(), //New Games can be added to this strategy
@@ -13,27 +13,26 @@ public class GameSetup{ //Game setup/controller script
     };
 
     public GameSetup(){
-        SaveEngine saveEngine = new SaveEngine();
-
+        SaveEngine saveEngine = new SaveEngine(); //Save engine singleton is initialised
     }
 
 
     public void SetupGame(){ //Sets up and initialises the game
         ConsoleUI.Instance.DisplayMessage("Welcome to the IFQ584 A3 Game Program.");
-        Rules selectedRules = RulesFactory();
+        Rules selectedRules = RulesFactory(); //Grab and build selected rules from player
         if(SaveEngine.Instance.CheckSaveFile(selectedRules) && LoadSelection()){
-            SaveFile save = SaveEngine.Instance.GetSaveFile(selectedRules);
-            LoadSave(save);
+            SaveFile save = SaveEngine.Instance.GetSaveFile(selectedRules); //Check for an existing save file on that game
+            LoadSave(save); //If player wants to, continue from a save file instead of a new game
             return;}
-        FinaliseRulesSetup(selectedRules);
-        GameMode mode = ModeSelection();
-        Player[] players = PlayersFactory(mode);
-        HistoryEngine historyEngine = new HistoryEngine(selectedRules);
-        gameLoop = new GameLoop(selectedRules,players,mode,this);
-        gameLoop.RunGame(); }
+        FinaliseRulesSetup(selectedRules); //If no save game continue, finalise rules setup with custom board size check
+        GameMode mode = ModeSelection(); //Prompt player to select mode
+        Player[] players = PlayersFactory(mode); //Create players based on mode
+        HistoryEngine historyEngine = new HistoryEngine(selectedRules); //HistoryEngine is initialised
+        gameLoop = new GameLoop(selectedRules,players,mode,this); //GameLoop is initialised
+        gameLoop.RunGame(); } //GameLoop begins running and playing the selected game
 
-    public void LoadSave(SaveFile save){
-        if(gameLoop != null) gameLoop.StopRunning();
+    public void LoadSave(SaveFile save){ //Restoring game state from given file
+        if(gameLoop != null) gameLoop.StopRunning(); //If GameLoop is running already, stop it
         Rules loadedRules = games[save.GameType];
         loadedRules.SetupRules(save.BoardSize);
         Player[] players = RestorePlayers(save);
@@ -42,11 +41,11 @@ public class GameSetup{ //Game setup/controller script
         gameLoop = new GameLoop(loadedRules,players,save.Mode,this);
         gameLoop.TurnIndex = save.TurnIndex;
         foreach(Move move in save.MoveHistory){
-            gameLoop.PerformTurn(move);
+            gameLoop.PerformTurn(move); //Performing all turns listed in the save's move history to restore board state
         }
         gameLoop.RunGame();}
 
-    public bool LoadSelection(){
+    public bool LoadSelection(){ //Simple method for prompting player wether to load from a save file or not
         bool incomplete = true;
         while (incomplete){
             string prompt = "A save file for this game has been detected. Types YES to load it and NO to start a new game.";
@@ -63,14 +62,14 @@ public class GameSetup{ //Game setup/controller script
         return selectedRules;
     }
 
-    private void FinaliseRulesSetup(Rules rules){
+    private void FinaliseRulesSetup(Rules rules){ //Finalises rules setup by checking wether board size must be chosen by player
         int boardSize = 0;
         if(rules.CustomBoard == true){
             boardSize = GetCustomBoardSize();}
         rules.SetupRules(boardSize); 
     }
 
-    private string GetGames(){
+    private string GetGames(){ //Uses the Games strategy dictionary to get a list of games to display to player
         string listOfGames = "";
         for(int x = 1; x <= games.Count ; x++ ){
             string gameString = $"{x}: {games[(GameType)x].GameName}";
@@ -79,7 +78,7 @@ public class GameSetup{ //Game setup/controller script
         return listOfGames;
     }
 
-    private Rules RulesSelection(){
+    private Rules RulesSelection(){ //Method for prompting player to tell GameSetup what game they want to play
         bool incomplete = true;
         string promptString = "Please select a game to play by entering its listed number.\n";
         promptString = promptString + GetGames();
@@ -93,7 +92,7 @@ public class GameSetup{ //Game setup/controller script
             }
             catch{
                 ConsoleUI.Instance.DisplayMessage("Invalid game selected. Please try again.");
-                continue;}}
+                continue;}} //If game is not in dictionary we catch and prompt player again.
         return selectedGame;}
 
     private int GetCustomBoardSize(){ //Method for obtaining custom boardsize from player
@@ -108,7 +107,7 @@ public class GameSetup{ //Game setup/controller script
             break;}
         return boardSize;}
 
-    public GameMode ModeSelection(){
+    public GameMode ModeSelection(){ //Method for obtaining mode from player
         string promptString = "Please select a mode to play:\n1: Human v Human\n2: Human v Computer";
         bool incomplete = true;
         GameMode mode = 0;
@@ -121,12 +120,12 @@ public class GameSetup{ //Game setup/controller script
                 break;}}
         return mode;}
 
-    private Player[] PlayersFactory(GameMode mode){
+    private Player[] PlayersFactory(GameMode mode){ //Dedicated player factory method for extendibility
         Player[] players = PlayerSetup(mode);
         return players;
     }
 
-    private Player[] PlayerSetup(GameMode mode){
+    private Player[] PlayerSetup(GameMode mode){ //Second part of player factory method, creates players
         Player[] players = new Player[2];
         switch(mode){
             case GameMode.HumanVHuman:
@@ -137,15 +136,15 @@ public class GameSetup{ //Game setup/controller script
             case GameMode.HumanVComputer:
                 players[0] = new HumanPlayer();
                 players[1] = new AIPlayer();
-                Random rng = new Random();
-                rng.Shuffle(players);// Shuffling player order
+                Random rng = new Random(); 
+                rng.Shuffle(players); //Shuffling AI and Human so who starts is random.
                 break;}
         for(int x = 0; x < players.Length; x++ ){
             players[x].PlayerNumber = x + 1; //Assigning player numbers
         }
         return players;}
 
-    public Player[] RestorePlayers(SaveFile save){
+    public Player[] RestorePlayers(SaveFile save){ //Method for restoring players from save file
         Player[] newPlayers = new Player[2];
         for(int x = 0; x < save.Players.Length; x++){
             PlayerSaveData savedPlayer = save.Players[x];
@@ -165,14 +164,3 @@ public class GameSetup{ //Game setup/controller script
 }
     
 
-
-public enum GameType{
-    NumericalTicTacToe = 1,
-    Gomoku,
-    Notakto
-}
-
-public enum GameMode{
-    HumanVHuman = 1,
-    HumanVComputer
-}

@@ -30,7 +30,7 @@ public class HistoryEngine {
         Board board = rules.BoardList[lastMove.BoardNumber];
         board.RemovePiece(lastMove.Position);
         moveHistory.Remove(lastMove);
-        redoHistory.Add(lastMove);
+        redoHistory.Add(lastMove); //Adding undone move to the redo history
         return true;
 
     }
@@ -43,9 +43,6 @@ public class HistoryEngine {
         board.SetPiece(redoMove.Piece.Value,redoMove.Position);
         rules.CheckWin(redoMove); //Mainly for Notakto, to re-kill a board.
         redoHistory.Remove(redoMove);
-        moveHistory.Add(redoMove);
+        moveHistory.Add(redoMove); //Adding redone move to the undo move history
         return true;}
-
-    //From here, a load from save method could be created that imports all saved moves
-    //Into redoHistory and then loops through a .Count, redoing all the taken moves.
 }
