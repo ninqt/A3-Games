@@ -42,6 +42,7 @@ public class GameSetup{ //Game setup/controller script
         gameLoop.TurnIndex = save.TurnIndex;
         foreach(Move move in save.MoveHistory){
             gameLoop.PerformTurn(move); //Performing all turns listed in the save's move history to restore board state
+            loadedRules.CheckWin(move);
         }
         gameLoop.RunGame();}
 
